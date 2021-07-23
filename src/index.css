@@ -77,3 +77,27 @@
     transform: rotate(360deg);
   }
 }
+
+.container {
+  padding: 40px;
+}
+
+.slick-slide {
+  position: relative;
+}
+
+.slick-slide img {
+  margin: auto;
+}
+.slick-slide div div {
+  margin: auto;
+}
+
+.slick-arrow {
+  /* background-color: #1e4151; */
+}
+
+.slick-prev:before,
+.slick-next:before {
+  display: none;
+}

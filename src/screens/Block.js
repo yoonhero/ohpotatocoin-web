@@ -5,14 +5,26 @@ import styled from "styled-components"
 import Layout from "../components/Layout"
 import PageTitle from "../components/PageTitle"
 import { Link } from "react-router-dom"
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
 import ReactNotification, { store } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
 import 'animate.css/animate.compat.css'
 import Loading from "../components/Loading"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import Slider from "react-slick";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
+
+const settings = {
+  dots: false,
+  arrows: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  nextArrow: <SampleNextArrow />,
+  prevArrow: <SamplePrevArrow />
+};
 
 
 function notification(message) {
@@ -63,8 +75,46 @@ const Li = styled.li`
     display: flex;
     flex-direction: row;
   } 
-  
 `
+
+const Arrow = styled.div`
+  background: #1e4151;
+  border-radius:50%;
+  padding: 8px;
+  position:absolute;
+  bottom: -45px;
+  z-index:2;
+`
+
+const SlickNext = styled(Arrow)`
+  left:52%;
+`
+
+const SlickPrev = styled(Arrow)`
+  right: 52%;
+`
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <SlickNext
+      onClick={ onClick }
+    >
+      <FontAwesomeIcon icon={ faArrowRight } color='#fff' size="lg" />
+    </SlickNext>
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <SlickPrev
+      onClick={ onClick }
+    >
+      <FontAwesomeIcon icon={ faArrowLeft } color='#fff' size="lg" />
+    </SlickPrev>
+  );
+}
 
 
 const Block = () => {
@@ -102,11 +152,13 @@ const Block = () => {
       })
     }
   }, [data])
+
   ///shadow-xl 
   return (
     <>
       <ReactNotification />
       <Layout>
+
 
         <PageTitle title={ "Block" } />
         <Main>
@@ -172,32 +224,33 @@ const Block = () => {
               </div>
 
             </div>
-            { data.transactions !== undefined && data.transactions !== null ? <div className="p-5">
-              <Carousel showThumbs={ false }>
-                { data?.transactions?.map(tx => {
+            { data.transactions !== undefined && data.transactions !== null ? <div className=" p-10 w-2/3 font-sans subpixel-antialiased ">
+              <Slider { ...settings }>
+                { data?.transactions?.map((tx, index) => {
 
                   return (
-                    <div className="p-8 mx-auto rounded-lg shadow-xl items-center content-center bg-purple-600 ... ">
+                    <div key={ index } className="p-8 h-80 relative mx-auto overflow-hidden rounded-3xl items-center content-center bg-blue-50 shadow hover:bg-blue-100 ... ">
+                      <span className="animate-ping delay-2000 duration-3000 absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-75"></span>
                       <div className="flex flex-col items-center p-3">
-                        <p className="font-sans text-2xl subpixel-antialiased font-medium ">Transaction</p>
-                        <p className="font-sans text-lg subpixel-antialiased font-medium"> { tx?.id?.slice(0, 20) + "..." }</p>
+                        <p className="font-sans text-2xl subpixel-antialiased text-gray-700 font-bold ">Transaction</p>
+                        <p className="font-sans text-lg subpixel-antialiased font-medium text-gray-600" > { tx?.id?.slice(0, 20) + "..." }</p>
                       </div>
-                      { tx?.txOuts?.map(txout => {
-                        return (
-                          <div className="flex flex-col p-2">
-                            <div>Address: { txout?.address?.slice(0, 20) + "..." }</div>
-                            <div>Amount: { txout?.amount }</div>
-                          </div>
-                        )
-                      }) }
+                      <div className="grid grid-cols-1 md:grid-cols-2 divide-x-2 divide-gray-600   ...">
+                        { tx?.txOuts?.map(txout => {
+                          return (
+                            <div className="flex flex-col p-2 text-gray-600 text-lg font-light ">
+                              <div>Address: { txout?.address?.slice(0, 20) + "..." }</div>
+                              <div>Amount: { txout?.amount }</div>
+                            </div>
+                          )
+                        }) }
+                      </div>
                     </div>
                   )
                 }) }
-                <div className="p-20 rounded-lg bg-purple-600 hover:bg-red-400 ...">9</div>
-              </Carousel>
-
-
+              </Slider>
             </div> : null }
+
 
 
 
