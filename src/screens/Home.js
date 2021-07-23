@@ -12,7 +12,7 @@ const Main = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+  padding: 30px;
 `
 
 
@@ -83,7 +83,7 @@ const MarginRight = styled.span`
 const Home = () => {
   return (
     <Layout>
-      <PageTitle title="소개" />
+      <PageTitle title="OhPotato" />
       <Main>
         <Titles>
           <Title>1 OhPotatoCoin = </Title>

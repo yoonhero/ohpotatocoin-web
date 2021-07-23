@@ -1,6 +1,6 @@
 const Wallet = () => {
   return (
-    <div>hoem</div>
+    <div>Wallet</div>
   )
 }
 

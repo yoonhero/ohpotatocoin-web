@@ -2,10 +2,10 @@ const routes = {
   home: "/",
   explorer: "/explorer",
   wallet: "/wallet",
-  block: "/block/:id",
+  block: "/block/:hash",
   blocks: "/blocks",
   transactions: "/transactions",
-  transaction: "/transaction/:id"
+  transaction: "/transaction/:id",
 }
 
 export default routes

@@ -58,12 +58,17 @@ const Logo = styled.p`
   font-size: 20px;
   font-family: "Ubuntu", sans-serif;
   font-weight: 600;
+  @media only screen and (max-width: 580px){
+    font-size: 18px;
+  }
 `;
 
 const Text = styled.span`
-
   font-size: 18px;
   font-weight: 500;
+  @media only screen and (max-width: 580px){
+    font-size: 16px;
+  }
 `
 
 
@@ -83,11 +88,14 @@ export const Header = () => {
           <Icons>
 
             <Icon>
-
-              <Text>Explorer</Text>
+              <Link to="/explorer">
+                <Text>Explorer</Text>
+              </Link>
             </Icon>
             <Icon>
-              <Text>Wallet</Text>
+              <Link to="wallet">
+                <Text>Wallet</Text>
+              </Link>
             </Icon>
           </Icons>
 
