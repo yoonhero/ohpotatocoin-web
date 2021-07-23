@@ -7,10 +7,25 @@ import PageTitle from "../components/PageTitle"
 import { Link } from "react-router-dom"
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-import 'react-notifications/lib/notifications.css';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import ReactNotification, { store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+import 'animate.css/animate.min.css';
+import 'animate.css/animate.compat.css'
 import Loading from "../components/Loading"
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+
+function notification(message) {
+  return {
+    title: "Success!",
+    message: message,
+    type: "success",
+    insert: "bottom",
+    container: "top-right",
+    animationIn: ["animate__animated animate__fadeIn"], // `animate.css v4` classes
+    animationOut: ["animate__animated animate__fadeOut"] // `animate.css v4` classes
+  };
+}
 const Main = styled.main`
   width: 100vw;
   display: flex;
@@ -87,95 +102,111 @@ const Block = () => {
       })
     }
   }, [data])
-
-  const CreateNotif = (message, title) => {
-    NotificationManager.success(message, title);
-  }
-
   ///shadow-xl 
   return (
-    <Layout>
-      <PageTitle title={ "Block" } />
-      <Main>
+    <>
+      <ReactNotification />
+      <Layout>
 
-        { loading ? <Loading /> : <Info>
-          <button onClick={ () => CreateNotif("copied to your clipboard", "Success") }>notif</button>
-          <h1 className="font-sans text-2xl md:text-4xl antialiased font-bold ...">Block { data?.height }</h1>
-          <div style={ { padding: 20 } } className="flex flex-col ...">
-            <p className="font-mono font-medium leading-normal ...">This block was mined on { date } </p>
-            <p className="font-mono font-medium leading-normal ...">The Block rewards, also known as the Coinbase reward, were sent to this <Link to={ "/address/" + miner }>address</Link> </p>
-          </div>
-          <div className="flex flex-col p-3">
-            <div className="divide-y-2 divide-solid  divide-black divide-opacity-10 ">
-              {/* <div className="flex flex-row  flex-wrap items-center ...">
+        <PageTitle title={ "Block" } />
+        <Main>
+
+          { loading ? <Loading /> : <Info>
+            <h1 className="font-sans text-2xl md:text-4xl antialiased font-bold  ...">Block { data?.height }</h1>
+            <div style={ { padding: 20 } } className="flex flex-col ...">
+              <p className="font-mono font-medium leading-normal ...">This block was mined on { date } </p>
+              <p className="font-mono font-medium leading-normal ...">The Block rewards, also known as the Coinbase reward, were sent to this <Link to={ "/address/" + miner }>address</Link> </p>
+            </div>
+            <div className="flex flex-col p-3 select-none">
+              <div className="divide-y-2 divide-solid  divide-black divide-opacity-10 ">
+                {/* <div className="flex flex-row  flex-wrap items-center ...">
                 <div className="font-sans text-lg p-3 w-40 ... ">Id</div>
                 <div className="font-sans text-normal p-3 ...">{ data.height }</div>
               </div> */}
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... " >Hash</div>
-                <div className="font-sans text-normal p-3 ...">{ data?.hash }</div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... " >Hash</div>
+                  <CopyToClipboard text={ data?.hash } onCopy={ () => {
+                    store.addNotification({
+                      ...notification("Now Block's Hash is copied to your clipboard"),
+                      container: "bottom-left",
+
+                    })
+                  } } >
+                    <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.hash }</div>
+                  </CopyToClipboard>
+
+                </div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... ">PrevHash</div>
+                  <CopyToClipboard text={ data?.prevHash } onCopy={ () => {
+                    store.addNotification({
+                      ...notification("Now Block's Previous Hash is copied to your clipboard"),
+                      container: "bottom-left",
+
+                    })
+                  } } >
+                    <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.prevHash }</div>
+                  </CopyToClipboard>
+
+                </div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... ">TimeStamp</div>
+                  <div className="font-sans text-normal p-3 ...">{ date }</div>
+                </div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... ">Miner</div>
+                  <div className="font-sans text-normal p-3 ...">{ miner.slice(0, 40) + "..." }</div>
+                </div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... ">Difficulty</div>
+                  <div className="font-sans text-normal p-3 ...">{ data?.difficulty }</div>
+                </div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... ">Nonce</div>
+                  <div className="font-sans text-normal p-3 ...">{ data?.nonce }</div>
+                </div>
+                <div className="flex flex-row  flex-wrap items-center ...">
+                  <div className="font-sans text-lg p-3 w-40 ... ">BlockReward</div>
+                  <div className="font-sans text-normal p-3 ...">{ reward }</div>
+                </div>
               </div>
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... ">PrevHash</div>
-                <div className="font-sans text-normal p-3 ...">{ data?.prevHash }</div>
-              </div>
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... ">TimeStamp</div>
-                <div className="font-sans text-normal p-3 ...">{ date }</div>
-              </div>
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... ">Miner</div>
-                <div className="font-sans text-normal p-3 ...">{ miner.slice(0, 40) + "..." }</div>
-              </div>
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... ">Difficulty</div>
-                <div className="font-sans text-normal p-3 ...">{ data?.difficulty }</div>
-              </div>
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... ">Nonce</div>
-                <div className="font-sans text-normal p-3 ...">{ data?.nonce }</div>
-              </div>
-              <div className="flex flex-row  flex-wrap items-center ...">
-                <div className="font-sans text-lg p-3 w-40 ... ">BlockReward</div>
-                <div className="font-sans text-normal p-3 ...">{ reward }</div>
-              </div>
+
             </div>
+            { data.transactions !== undefined && data.transactions !== null ? <div className="p-5">
+              <Carousel showThumbs={ false }>
+                { data?.transactions?.map(tx => {
 
-          </div>
-          { data.transactions !== undefined && data.transactions !== null ? <div className="p-5">
-            <Carousel showThumbs={ false }>
-              { data?.transactions?.map(tx => {
-
-                return (
-                  <div className="p-8 mx-auto rounded-lg shadow-xl items-center content-center bg-purple-600 ... ">
-                    <div className="flex flex-col items-center p-3">
-                      <p className="font-sans text-2xl subpixel-antialiased font-medium ">Transaction</p>
-                      <p className="font-sans text-lg subpixel-antialiased font-medium"> { tx?.id?.slice(0, 20) + "..." }</p>
+                  return (
+                    <div className="p-8 mx-auto rounded-lg shadow-xl items-center content-center bg-purple-600 ... ">
+                      <div className="flex flex-col items-center p-3">
+                        <p className="font-sans text-2xl subpixel-antialiased font-medium ">Transaction</p>
+                        <p className="font-sans text-lg subpixel-antialiased font-medium"> { tx?.id?.slice(0, 20) + "..." }</p>
+                      </div>
+                      { tx?.txOuts?.map(txout => {
+                        return (
+                          <div className="flex flex-col p-2">
+                            <div>Address: { txout?.address?.slice(0, 20) + "..." }</div>
+                            <div>Amount: { txout?.amount }</div>
+                          </div>
+                        )
+                      }) }
                     </div>
-                    { tx?.txOuts?.map(txout => {
-                      return (
-                        <div className="flex flex-col p-2">
-                          <div>Address: { txout?.address?.slice(0, 20) + "..." }</div>
-                          <div>Amount: { txout?.amount }</div>
-                        </div>
-                      )
-                    }) }
-                  </div>
-                )
-              }) }
-              <div className="p-20 rounded-lg bg-purple-600 hover:bg-red-400 ...">9</div>
-            </Carousel>
+                  )
+                }) }
+                <div className="p-20 rounded-lg bg-purple-600 hover:bg-red-400 ...">9</div>
+              </Carousel>
 
 
-          </div> : null }
+            </div> : null }
 
 
 
 
-        </Info>
-        }
-      </Main>
-    </Layout>
+          </Info>
+          }
+        </Main>
+      </Layout>
+    </>
   )
 }
 
