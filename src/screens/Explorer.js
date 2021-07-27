@@ -74,6 +74,7 @@ function Explorer() {
   const [data, setData] = useState()
   const [loading, setLoading] = useState(true)
   const [txs, setTxs] = useState()
+  const [status, setStatus] = useState()
 
   const fetchData = async () => {
     try {
@@ -82,6 +83,12 @@ function Explorer() {
       );
       let newArr = [...response.data];
       setData(newArr)
+
+      const status_response = await axios.get(
+        "http://localhost:4000/status"
+      );
+      console.log(status_response)
+      setStatus(status_response.data)
 
       const tx_respone = await axios.get(
         'http://localhost:4000/latesttransactions'
@@ -96,6 +103,10 @@ function Explorer() {
       console.log(e)
     }
   };
+
+  useEffect(() => {
+    console.log(status)
+  }, [status])
 
   useEffect(() => {
     setLoading(true);
@@ -117,7 +128,8 @@ function Explorer() {
               </div>
               <div className="p-1 font-normal text-lg text-gray-500">
                 <span>
-                  Blockchain information for OhPotatoCoin (OPC) including historical prices, the most recently mined blocks, and data for the latest transactions.</span>
+                  Blockchain information for OhPotatoCoin (OPC) including historical prices, the most recently mined blocks, and data for the latest transactions. Currenty Difficulty is { status?.currentDifficulty }. And the length of the ohpotato chain is { status?.height }.
+                </span>
               </div>
             </div>
             {/* latest block and latest transaction */ }
