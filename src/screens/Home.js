@@ -95,13 +95,17 @@ const Home = () => {
 
         <Info>Ohpotato coin is open source p2p digital currency, made by Yoonhero06</Info>
         <Btns>
-          <Button bg={ "#1e4151" } t={ "white" }>Get Started Now</Button>
-          <Button bg={ "#fdfcdc" } t={ "#1e4151" }>
-            <a href={ "https://github.com/yoonhero/ohpotatocoin" }>
+          <Link to="/explorer">
+            <Button bg={ "#1e4151" } t={ "white" } className="m-2">Get Started Now</Button>
+          </Link>
+          <a href={ "https://github.com/yoonhero/ohpotatocoin" } >
+            <Button bg={ "#fdfcdc" } t={ "#1e4151" } className="m-2">
+
               <MarginRight><FontAwesomeIcon icon={ faGithub } /></MarginRight>
               <span>Source</span>
-            </a>
-          </Button>
+            </Button>
+          </a>
+
         </Btns>
 
       </Main>

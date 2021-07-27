@@ -80,7 +80,7 @@ const Transactions = () => {
 
   return (
     <Layout>
-      <PageTitle title={ "All Blocks" } />
+      <PageTitle title={ "All Transactions" } />
       <div className="flex items-center flex-col w-screen" >
         { loading || data === undefined ? (
           <Loading />
@@ -88,15 +88,13 @@ const Transactions = () => {
 
           mobile === true ? (<ul className="md:p-5 w-full">
             <TableHeader>
-              <Col1>Id</Col1>
-              <Col2>Hash</Col2>
-              <Col3>PrevHash</Col3>
+              <Col1>Hash</Col1>
               <Col4>Time</Col4>
             </TableHeader>
             { data.map((tx, index) => {
               if (index >= offset && index < offset + pages) {
                 return (
-                  <TableRow className="p-15 m-4" key={ tx?.id }>
+                  <TableRow className="p-15 m-4 shadow-lg rounded-3xl" key={ tx?.id } >
                     <Link to={ "/transaction/" + tx?.id }>
 
                       <HoverCol1 data-label="Hash">{ tx?.id.slice(0, 2) + "..." + tx?.id.slice(-20, -1) }</HoverCol1>
@@ -127,7 +125,7 @@ const Transactions = () => {
                       if (index > offset && index < offset + pages) {
 
                         return (
-                          <tr className="p-5 rounded-lg" key={ tx?.id }>
+                          <tr className="p-5 rounded-lg " key={ tx?.id }>
                             <td className="p-3 ">
                               {/* <span className="hidden md:tx">Id</span> */ }
                               <Link to={ "/transaction/" + tx?.id }>

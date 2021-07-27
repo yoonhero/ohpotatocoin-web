@@ -105,12 +105,12 @@ function Explorer() {
 
   return (
     <Layout>
-      <PageTitle title={ "탐험" } />
+      <PageTitle title={ "Explorer" } />
       { loading || data === undefined ? (
         <Loading />
       ) : (
         <>
-          <div div className="p-10 w-full  font-sans subpixel-antialiased md:w-2/3 divide-y-2 divide-gray-600 divide-dashed">
+          <div div className="p-10 w-full  font-sans subpixel-antialiased md:w-10/12 divide-y-2 divide-gray-600 divide-dashed">
             <div className="mb-4">
               <div className="p-2 font-bold text-xl md:text-2xl">
                 <span>Ohpotato 코인</span>

@@ -5,7 +5,7 @@ const routes = {
   block: "/block/:hash",
   blocks: "/blocks",
   transactions: "/transactions",
-  transaction: "/transaction/:id",
+  transaction: "/transaction/:hash",
 }
 
 export default routes

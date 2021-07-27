@@ -8,12 +8,10 @@ export const Li = styled.li`
   margin-bottom: 10px; 
 `
 export const TableHeader = styled(Li)`
-  background-color: #ffffff;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   padding: 20px;
-  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.2);
 @media only screen and (max-width: 767px) {
     display: none;
 }
