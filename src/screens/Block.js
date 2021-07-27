@@ -12,32 +12,10 @@ import 'animate.css/animate.compat.css'
 import Loading from "../components/Loading"
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Slider from "react-slick";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
-
-const settings = {
-  dots: false,
-  arrows: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />
-};
+import Notification from "../components/Notif"
+import { CarouselSettings } from "../components/Carousel"
 
 
-function notification(message) {
-  return {
-    title: "Success!",
-    message: message,
-    type: "success",
-    insert: "bottom",
-    container: "top-right",
-    animationIn: ["animate__animated animate__fadeIn"], // `animate.css v4` classes
-    animationOut: ["animate__animated animate__fadeOut"] // `animate.css v4` classes
-  };
-}
 const Main = styled.main`
   width: 100vw;
   display: flex;
@@ -76,45 +54,6 @@ const Li = styled.li`
     flex-direction: row;
   } 
 `
-
-const Arrow = styled.div`
-  background: #1e4151;
-  border-radius:50%;
-  padding: 8px;
-  position:absolute;
-  bottom: -45px;
-  z-index:2;
-`
-
-const SlickNext = styled(Arrow)`
-  left:52%;
-`
-
-const SlickPrev = styled(Arrow)`
-  right: 52%;
-`
-
-function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <SlickNext
-      onClick={ onClick }
-    >
-      <FontAwesomeIcon icon={ faArrowRight } color='#fff' size="lg" />
-    </SlickNext>
-  );
-}
-
-function SamplePrevArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <SlickPrev
-      onClick={ onClick }
-    >
-      <FontAwesomeIcon icon={ faArrowLeft } color='#fff' size="lg" />
-    </SlickPrev>
-  );
-}
 
 
 const Block = () => {
@@ -179,7 +118,7 @@ const Block = () => {
                   <div className="font-sans text-lg p-3 w-40 ... " >Hash</div>
                   <CopyToClipboard text={ data?.hash } onCopy={ () => {
                     store.addNotification({
-                      ...notification("Now Block's Hash is copied to your clipboard"),
+                      ...Notification("Now Block's Hash is copied to your clipboard"),
                       container: "bottom-left",
 
                     })
@@ -192,7 +131,7 @@ const Block = () => {
                   <div className="font-sans text-lg p-3 w-40 ... ">PrevHash</div>
                   <CopyToClipboard text={ data?.prevHash } onCopy={ () => {
                     store.addNotification({
-                      ...notification("Now Block's Previous Hash is copied to your clipboard"),
+                      ...Notification("Now Block's Previous Hash is copied to your clipboard"),
                       container: "bottom-left",
 
                     })
@@ -225,7 +164,7 @@ const Block = () => {
 
             </div>
             { data.transactions !== undefined && data.transactions !== null ? <div className=" p-10 w-2/3 font-sans subpixel-antialiased ">
-              <Slider { ...settings }>
+              <Slider { ...CarouselSettings }>
                 { data?.transactions?.map((tx, index) => {
 
                   return (

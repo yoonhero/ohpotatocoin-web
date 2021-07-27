@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import styled from "styled-components"
 import ReactPaginate from 'react-paginate';
 import Loading from "../components/Loading"
+import { GetWindowDimensions } from "../utils"
 
 const Li = styled.li`
  border-radius: 3px;
@@ -81,21 +82,12 @@ const Col4 = styled.div`
   flex-basis: 10%;
 `
 
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height
-  };
-}
-
-
 function Blocks() {
   const [data, setData] = useState()
   const [loading, setLoading] = useState(true)
   const [offset, setOffset] = useState(0)
   const [pageCount, setPageCount] = useState(0)
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+  const [windowDimensions, setWindowDimensions] = useState(GetWindowDimensions())
   const [mobile, setMobile] = useState(false)
   const [pages, setPages] = useState(10)
   const [selected, setSelected] = useState(0)
@@ -117,7 +109,7 @@ function Blocks() {
     fetchData()
     setLoading(false);
     function handleResize() {
-      setWindowDimensions(getWindowDimensions());
+      setWindowDimensions(GetWindowDimensions());
 
     }
 
