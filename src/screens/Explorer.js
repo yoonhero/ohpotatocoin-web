@@ -9,6 +9,7 @@ import { CarouselSettingsExplorer } from "../components/Carousel"
 import Loading from "../components/Loading"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
+
 const Li = styled.li`
  border-radius: 3px;
   padding: 20px 30px;

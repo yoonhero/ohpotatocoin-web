@@ -16,6 +16,67 @@ import Notification from "../components/Notif"
 import { CarouselSettings } from "../components/Carousel"
 
 
+const Li = styled.li`
+ border-radius: 3px;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; 
+`
+
+const TableRow = styled(Li)`
+background-color: #ffffff;
+  box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  div {
+    flex-basis: 100%;
+    display: flex;
+    padding: 20px 0;
+    &:before {
+      color: #6c7a89;
+      padding-right: 10px;
+      content: attr(data-label);
+      flex-basis: 0%;
+      text-align: right;
+    }
+
+}
+`
+
+const Col1 = styled.div`
+  flex-basis: 15%;
+  color: rgb(20, 70, 153);
+`
+
+const HoverCol1 = styled(Col1)`
+&:hover{
+    text-decoration: underline;
+  }`
+
+const Col2 = styled.div`
+flex-basis: 55%;
+color: rgb(20, 70, 153);
+`
+
+const HoverCol2 = styled(Col2)`
+&:hover{
+    text-decoration: underline;
+  }`
+
+const Col3 = styled.div`
+   flex-basis: 20%;
+`
+
+const Col4 = styled.div`
+  flex-basis: 10%;
+`
+
+
 const Main = styled.main`
   width: 100vw;
   display: flex;
@@ -34,27 +95,6 @@ const Info = styled.div`
   color: #1e4151;
   padding: 30px;
 `
-const Title = styled.span`
-  font-size: 30px;
-  font-weight: 500;
-`
-const Desc = styled.p``
-const BlockInfo = styled.div``
-
-
-const Li = styled.li`
- border-radius: 3px;
-  padding: 10px 0px;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #000;
-  div{
-    display: flex;
-    flex-direction: row;
-  } 
-`
-
 
 const Block = () => {
   const { hash } = useParams()
@@ -163,36 +203,29 @@ const Block = () => {
               </div>
 
             </div>
+
             { data.transactions !== undefined && data.transactions !== null ? <div className=" p-10 w-2/3 font-sans subpixel-antialiased ">
               <Slider { ...CarouselSettings }>
                 { data?.transactions?.map((tx, index) => {
-
-                  return (
-                    <div key={ index } className="p-8 h-80 relative mx-auto overflow-hidden rounded-3xl items-center content-center bg-blue-50 shadow hover:bg-blue-100 ... ">
-                      <span className="animate-ping delay-2000 duration-3000 absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-75"></span>
-                      <div className="flex flex-col items-center p-3">
-                        <p className="font-sans text-2xl subpixel-antialiased text-gray-700 font-bold ">Transaction</p>
-                        <p className="font-sans text-lg subpixel-antialiased font-medium text-gray-600" > { tx?.id?.slice(0, 20) + "..." }</p>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 divide-x-2 divide-gray-600   ...">
-                        { tx?.txOuts?.map(txout => {
-                          return (
-                            <div className="flex flex-col p-2 text-gray-600 text-lg font-light ">
-                              <div>Address: { txout?.address?.slice(0, 20) + "..." }</div>
-                              <div>Amount: { txout?.amount }</div>
-                            </div>
-                          )
-                        }) }
-                      </div>
-                    </div>
-                  )
+                  return tx?.txOuts?.map(txout => {
+                    return (
+                      <>
+                        <TableRow key={ txout?.address }>
+                          <Link to={ "/transaction/" + tx?.id }>
+                            <HoverCol1 data-label="Hash">{ tx?.id?.slice(0, 2) + "..." + tx?.id?.slice(-20, -1) }</HoverCol1>
+                          </Link>
+                          <Link to={ "/transaction/" + tx?.id }>
+                            <HoverCol2 data-label="Address">{ txout?.address?.slice(0, 2) + "..." + txout?.address?.slice(-20, -1) }</HoverCol2>
+                          </Link>
+                          <Col3 data-label="Amount">{ txout?.amount } </Col3>
+                          <Col4 data-label="TimeStamp">{ tx?.timestamp }</Col4>
+                        </TableRow>
+                      </>
+                    )
+                  })
                 }) }
               </Slider>
             </div> : null }
-
-
-
-
 
           </Info>
           }
@@ -203,3 +236,22 @@ const Block = () => {
 }
 
 export default Block
+
+
+// {/* <div key={ index } className="p-8 h-80 relative mx-auto overflow-hidden rounded-3xl items-center content-center bg-blue-50 shadow hover:bg-blue-100 ... ">
+//                         <span className="animate-ping delay-2000 duration-3000 absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-75"></span>
+//                         <div className="flex flex-col items-center p-3">
+//                           <p className="font-sans text-2xl subpixel-antialiased text-gray-700 font-bold ">Transaction</p>
+//                           <p className="font-sans text-lg subpixel-antialiased font-medium text-gray-600" > { tx?.id?.slice(0, 20) + "..." }</p>
+//                         </div>
+//                         <div className="grid grid-cols-1 md:grid-cols-2 divide-x-2 divide-gray-600   ...">
+//                           { tx?.txOuts?.map(txout => {
+//                             return (
+//                               <div className="flex flex-col p-2 text-gray-600 text-lg font-light ">
+//                                 <div>Address: { txout?.address?.slice(0, 20) + "..." }</div>
+//                                 <div>Amount: { txout?.amount }</div>
+//                               </div>
+//                             )
+//                           }) }
+//                         </div>
+//                       </div> */}
