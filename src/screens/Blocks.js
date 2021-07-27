@@ -87,9 +87,11 @@ function Blocks() {
       <div className="flex items-center flex-col w-screen" >
         { loading || data === undefined ? (
           <Loading />
-        ) : <> {
-
-          mobile === true ? (<ul className="p-5 w-screen">
+        ) : <>
+          <div className="font-sans text-2xl md:text-3xl text-gray-600 font-bold p-2 md:p-4">
+            <span>All Blocks</span>
+          </div>
+          { mobile === true ? (<ul className="p-5 w-screen">
             <TableHeader>
               <Col1>Id</Col1>
               <Col2>Hash</Col2>
@@ -170,7 +172,7 @@ function Blocks() {
             </div>
           </div>
 
-        }</>
+          }</>
 
         }
         <div className="flex items-center">

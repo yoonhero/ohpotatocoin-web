@@ -84,9 +84,11 @@ const Transactions = () => {
       <div className="flex items-center flex-col w-screen" >
         { loading || data === undefined ? (
           <Loading />
-        ) : <> {
-
-          mobile === true ? (<ul className="md:p-5 w-full">
+        ) : <>
+          <div className="font-sans text-2xl md:text-3xl text-gray-600 font-bold p-2 md:p-4">
+            <span>All Transactions</span>
+          </div>
+          { mobile === true ? (<ul className="md:p-5 w-full">
             <TableHeader>
               <Col1>Hash</Col1>
               <Col4>Time</Col4>
@@ -162,7 +164,7 @@ const Transactions = () => {
             </div>
           </div>
 
-        }</>
+          }</>
 
         }
         <div className="flex items-center">
