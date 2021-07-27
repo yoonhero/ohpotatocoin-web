@@ -41,6 +41,28 @@ function SamplePrevArrow(props) {
   );
 }
 
+function ExplorerNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <SlickNext
+      onClick={ onClick }
+    >
+      <FontAwesomeIcon icon={ faArrowRight } color='#fff' size="lg" />
+    </SlickNext>
+  );
+}
+
+function ExplorerPrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <SlickPrev
+      onClick={ onClick }
+    >
+      <FontAwesomeIcon icon={ faArrowLeft } color='#fff' size="lg" />
+    </SlickPrev>
+  );
+}
+
 
 export const CarouselSettings = {
   dots: false,
@@ -53,3 +75,12 @@ export const CarouselSettings = {
   prevArrow: <SamplePrevArrow />
 };
 
+export const CarouselSettingsExplorer = {
+  dots: true,
+  arrows: false,
+  infinite: true,
+  speed: 500,
+  autoplay: true,
+  slidesToShow: 1,
+  slidesToScroll: 1
+}
