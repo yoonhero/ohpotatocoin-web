@@ -20,4 +20,12 @@ It consists of List of the blocks.
 
 It consists of Information of the block. See the specific inforamtion of that block.
 
+### All Transactions "/transactions/"
+
+It consists of List of the blocks.
+
+### Transaction "/transaction/{hash}"
+
+It consists of Information of the transaction. See the specific inforamtion of that block.
+
 ## The Other functions are coming soon
