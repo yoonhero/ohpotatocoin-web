@@ -93,7 +93,7 @@ export const Header = () => {
               </Link>
             </Icon>
             <Icon>
-              <Link to="wallet">
+              <Link to="/wallet">
                 <Text>Wallet</Text>
               </Link>
             </Icon>

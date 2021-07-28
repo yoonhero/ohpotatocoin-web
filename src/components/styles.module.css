@@ -1,0 +1,4 @@
+.c {
+  cursor: pointer;
+  will-change: transform, opacity;
+}
