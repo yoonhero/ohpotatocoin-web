@@ -88,110 +88,124 @@ const Wallet = () => {
   //   }
   // });
   return (
-    <Layout>
-      <PageTitle title="Waleet" />
-      <Main
-        className={ `relative flex flex-col w-full min-h-screen max-h-screen font-sans items-center justify-center text-white` }>
-        {/* <a.div 
+    <>
+      <ReactNotification />
+      <Layout>
+        <PageTitle title="Waleet" />
+        <Main
+          className={ `relative flex flex-col w-full min-h-screen max-h-screen font-sans items-center justify-center text-white` }>
+          {/* <a.div 
       onClick={ () => set(state => !state) }
 
        style={ { opacity: opacity.to(o => 1 - o), transform } }
        className={ `${styles.c} ` } 
        > */}
 
-        <Card
-          style={ { opacity: opacity.to(o => 1 - o), transform, display: flipped ? "none" : "flex", } }
-          className={ `${styles.c} ` }
+          <Card
+            style={ { opacity: opacity.to(o => 1 - o), transform, display: flipped ? "none" : "flex", } }
+            className={ `${styles.c} ` }
 
-        >
-
-          {/* hover:from-pink-500 hover:to-yellow-500 */ }
-          <div
-            className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl "
           >
 
-            <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
-              <div className="w-10 m-2">
-                <ImageLoad image={ "/ohpotato.png" } />
+            {/* hover:from-pink-500 hover:to-yellow-500 */ }
+            <div
+              className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl "
+            >
+
+              <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
+                <div className="w-10 m-2">
+                  <ImageLoad image={ "/ohpotato.png" } />
+                </div>
+                <div className="text-base">
+                  <span className="font-semibold p-1">Balance</span>
+                  <span className="font-medium p-1">100 OPC</span>
+
+                </div>
+              </CardHeader>
+              <CardBody className="relative p-6 flex flex-col items-start justify-end  z-0" height={ cardWidth }>
+
+                { false ? (
+                  <>
+                    <div className="text-lg ">
+                      <span className="m-1">Address</span>
+                      <span className="m-1">
+                        <FontAwesomeIcon icon={ faPen } size="sm" onClick={ () => { console.log("erun") } } />
+                      </span>
+                    </div>
+                    <div className="text-sm break-all w-10/12 cursor-pointer">
+                      <CopyToClipboard
+                        text={ "f849a3071c9abfc4705728e44de9cd0f515f212u3o4124" }
+                        onCopy={ () => {
+                          store.addNotification({
+                            ...Notification("Now Your Address is copied to your clipboard"),
+                            container: "bottom-left",
+
+                          })
+                        } } >
+                        <span>f849a3071c9abfc4705728e44de9cd0f515f23...</span>
+                      </CopyToClipboard>
+
+
+                    </div>
+                  </>
+                ) : <div>
+                  <input type="text" class="rounded-lg text-gray-800" placeholder="Address" />
+                  <button>OK</button>
+                </div> }
+
+
+              </CardBody>
+              <div className=" absolute bottom-4 right-4 z-10">
+                <SpringButton />
               </div>
-              <div className="text-base">
-                <span className="font-semibold p-1">Balance</span>
-                <span className="font-medium p-1">100 OPC</span>
 
-              </div>
-            </CardHeader>
-            <CardBody className="relative p-6 flex flex-col items-start justify-end  z-0" height={ cardWidth }>
-              <div className="text-lg ">
-                <span className="m-1">Address</span>
-                <span className="m-1">
-                  <FontAwesomeIcon icon={ faPen } size="sm" onClick={ () => { console.log("erun") } } />
-                </span>
-              </div>
-              <div className="text-sm break-all w-10/12 cursor-pointer">
-                <CopyToClipboard text={ "f849a3071c9abfc4705728e44de9cd0f515f212u3o4124" } onCopy={ () => {
-                  store.addNotification({
-                    ...Notification("Now Your Address is copied to your clipboard"),
-                    container: "bottom-left",
+            </div>
+          </Card>
+          <Card
+            style={ {
+              opacity,
+              transform,
+              rotateX: '180deg',
+              display: !flipped ? "none" : "flex",
+            } }
+            className={ `${styles.c} ` } >
+            <div className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl" >
+              <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
+                <div className="w-10 m-2">
+                  <ImageLoad image={ "/ohpotato.png" } />
+                </div>
+                <div className="text-base">
+                  <span className="font-semibold p-1">Balance</span>
+                  <span className="font-medium p-1">100 OPC</span>
 
-                  })
-                } } >
-                  <span>f849a3071c9abfc4705728e44de9cd0f515f23...</span>
-                </CopyToClipboard>
+                </div>
+              </CardHeader>
+              <CardBody className="relative p-6 flex flex-col items-start justify-end " >
+                <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                  <span className="m-1">From</span>
+                  <input type="text" class="rounded text-gray-800" placeholder="Your Private Key" />
+                </div>
+                <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                  <span className="m-1">To</span>
+                  <input type="text" class="rounded text-gray-800" placeholder="Address" />
+                </div>
+                <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                  <button>SEND</button>
+                </div>
 
-              </div>
 
+              </CardBody>
 
-            </CardBody>
-            <div className=" absolute bottom-4 right-4 z-10">
+            </div>
+            <div className=" absolute bottom-4 right-4 ">
               <SpringButton />
             </div>
 
-          </div>
-        </Card>
-        <Card
-          style={ {
-            opacity,
-            transform,
-            rotateX: '180deg',
-            display: !flipped ? "none" : "flex",
-          } }
-          className={ `${styles.c} ` } >
-          <div className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl" >
-            <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
-              <div className="w-10 m-2">
-                <ImageLoad image={ "/ohpotato.png" } />
-              </div>
-              <div className="text-base">
-                <span className="font-semibold p-1">Balance</span>
-                <span className="font-medium p-1">100 OPC</span>
+          </Card>
 
-              </div>
-            </CardHeader>
-            <CardBody className="relative p-6 flex flex-col items-start justify-end " >
-              <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                <span className="m-1">From</span>
-                <input type="text" class="rounded text-gray-800" placeholder="Your Private Key" />
-              </div>
-              <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                <span className="m-1">To</span>
-                <input type="text" class="rounded text-gray-800" placeholder="Address" />
-              </div>
-              <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                <button>SEND</button>
-              </div>
-
-
-            </CardBody>
-
-          </div>
-          <div className=" absolute bottom-4 right-4 ">
-            <SpringButton />
-          </div>
-
-        </Card>
-
-      </Main>
-    </Layout>
+        </Main>
+      </Layout>
+    </>
   )
 }
 
