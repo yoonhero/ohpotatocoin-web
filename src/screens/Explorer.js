@@ -120,8 +120,9 @@ function Explorer() {
       { loading || data === undefined ? (
         <Loading />
       ) : (
-        <>
-          <div div className=" p-10 w-full  font-sans subpixel-antialiased md:w-10/12 divide-y-2 divide-gray-600 divide-dashed">
+        <div className="w-full min-h-screen flex flex-col items-center justify-center">
+          <div className="w-full h-10"></div>
+          <div className="flex flex-col items-center justify-center p-10 w-full  font-sans subpixel-antialiased md:w-10/12 divide-y-2 divide-gray-600 divide-dashed">
             <div className="mb-4">
               <div className="p-2 font-bold text-xl md:text-2xl">
                 <span>Ohpotato 코인</span>
@@ -211,7 +212,7 @@ function Explorer() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       ) }
     </Layout >
 

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ImageLoad } from "./ImageLoad";
 
 const SHeader = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
   width: 100%;
   background-color:#1e4151 !important;
   padding: 10px 0px;
@@ -10,7 +15,7 @@ const SHeader = styled.header`
   align-items: center;
   justify-content: center;
   color: white;
-  
+  transition: 0.1s;
 `;
 
 const Wrapper = styled.div`
@@ -56,15 +61,19 @@ const Icon = styled.span`
 
 const Logo = styled.p`
   font-size: 20px;
+  padding: 10px;
   font-family: "Ubuntu", sans-serif;
   font-weight: 600;
   @media only screen and (max-width: 580px){
     font-size: 18px;
   }
+  img {
+    width: 40px; height: 40px;
+  }
 `;
 
 const Text = styled.span`
-  font-size: 18px;
+  font-size: ${props => String(props.size)}px;
   font-weight: 500;
   @media only screen and (max-width: 580px){
     font-size: 16px;
@@ -73,13 +82,32 @@ const Text = styled.span`
 
 
 export const Header = () => {
+  const [padding, setPadding] = useState("10px 0px")
+  const [fontsize, setFontsize] = useState(18)
+  const [logo, setLogo] = useState(false)
+
+  window.onscroll = function () { scrollFunction() };
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
+      setPadding("0px 0px")
+      setFontsize(13)
+      setLogo(true)
+    } else {
+      setPadding("10px 0px")
+      setFontsize(18)
+      setLogo(false)
+    }
+  }
   return (
-    <SHeader>
+    <SHeader style={ { padding } }>
       <Wrapper>
         <Column>
           <span>
             <Link to="/">
-              <Logo className="ourlogo">오감자코인</Logo>
+              <Logo className="ourlogo" style={ { fontSize: fontsize + 4 } }>
+                { !logo ? "오감자코인" : "OPC" }
+              </Logo>
 
             </Link>
           </span>
@@ -89,12 +117,12 @@ export const Header = () => {
 
             <Icon>
               <Link to="/explorer">
-                <Text>Explorer</Text>
+                <Text size={ fontsize }>Explorer</Text>
               </Link>
             </Icon>
             <Icon>
               <Link to="/wallet">
-                <Text>Wallet</Text>
+                <Text size={ fontsize }>Wallet</Text>
               </Link>
             </Icon>
           </Icons>

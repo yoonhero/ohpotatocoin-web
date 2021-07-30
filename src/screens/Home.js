@@ -84,31 +84,34 @@ const Home = () => {
   return (
     <Layout>
       <PageTitle title="OhPotato" />
-      <Main>
-        <Titles>
-          <Title>1 OhPotatoCoin = </Title>
-          <Title> 1 오감자</Title>
-        </Titles>
-        <ImageCon>
-          <ImageLoad image={ "/ohpotato.png" } />
-        </ImageCon>
+      <div className="w-full min-h-screen flex flex-col items-center justify-center">
+        <div className="w-full h-10"></div>
+        <Main>
+          <Titles>
+            <Title>1 OhPotatoCoin = </Title>
+            <Title> 1 오감자</Title>
+          </Titles>
+          <ImageCon>
+            <ImageLoad image={ "/ohpotato.png" } />
+          </ImageCon>
 
-        <Info>Ohpotato coin is open source p2p digital currency, made by Yoonhero06</Info>
-        <Btns>
-          <Link to="/explorer">
-            <Button bg={ "#1e4151" } t={ "white" } className="m-2">Get Started Now</Button>
-          </Link>
-          <a href={ "https://github.com/yoonhero/ohpotatocoin" } >
-            <Button bg={ "#fdfcdc" } t={ "#1e4151" } className="m-2">
+          <Info>Ohpotato coin is open source p2p digital currency, made by Yoonhero06</Info>
+          <Btns>
+            <Link to="/explorer">
+              <Button bg={ "#1e4151" } t={ "white" } className="m-2">Get Started Now</Button>
+            </Link>
+            <a href={ "https://github.com/yoonhero/ohpotatocoin" } >
+              <Button bg={ "#fdfcdc" } t={ "#1e4151" } className="m-2">
 
-              <MarginRight><FontAwesomeIcon icon={ faGithub } /></MarginRight>
-              <span>Source</span>
-            </Button>
-          </a>
+                <MarginRight><FontAwesomeIcon icon={ faGithub } /></MarginRight>
+                <span>Source</span>
+              </Button>
+            </a>
 
-        </Btns>
+          </Btns>
 
-      </Main>
+        </Main>
+      </div>
 
     </Layout>
   )

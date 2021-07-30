@@ -126,38 +126,42 @@ const Transaction = () => {
     <>
       <Layout>
         <PageTitle title={ "Transaction" } />
-        <Main>
+        <div className="w-full min-h-screen flex flex-col items-center justify-center">
+          <div className="w-full h-10"></div>
 
-          { loading ? <Loading /> : <Info>
-            <h1 className="font-sans text-3xl md:text-4xl antialiased font-bold p-3  ...">Transaction </h1>
-            <span className="font-sans fond-medium text-base break-all md:text-lg">{ data?.id }</span>
-            <div style={ { padding: 20 } } className="flex flex-col ...">
-              <p className="font-mono font-medium leading-normal ...">This Transaction was confirmed on { date } </p>
-            </div>
-            <div className="mt-4 w-full flex flex-col md:w-1/2 md:p-5 ">
-              <div>
-                <Slider { ...CarouselSettings }>
-                  { data?.txOuts?.map((txout, index) => {
-                    if (index < 6) {
-                      return (
-                        <TableRow key={ index } className="bg-blue-100 shadow-lg">
-                          <Col1 data-label="Hash">{ data?.id?.slice(0, 2) + "..." + data?.id?.slice(-20, -1) }</Col1>
-                          <Col2 data-label="Address">{ txout?.address?.slice(0, 2) + "..." + txout?.address?.slice(-20, -1) }</Col2>
-                          <Col3 data-label="TimeStamp">{ txout?.amount }</Col3>
-                          <Col4 data-label="TimeStamp">{ data?.timestamp }</Col4>
-                        </TableRow>
-                      )
-                    }
-                    return null
-                  }
-                  ) }
-                </Slider>
+          <Main>
+
+            { loading ? <Loading /> : <Info>
+              <h1 className="font-sans text-3xl md:text-4xl antialiased font-bold p-3  ...">Transaction </h1>
+              <span className="font-sans fond-medium text-base break-all md:text-lg">{ data?.id }</span>
+              <div style={ { padding: 20 } } className="flex flex-col ...">
+                <p className="font-mono font-medium leading-normal ...">This Transaction was confirmed on { date } </p>
               </div>
-            </div>
+              <div className="mt-4 w-full flex flex-col md:w-1/2 md:p-5 ">
+                <div>
+                  <Slider { ...CarouselSettings }>
+                    { data?.txOuts?.map((txout, index) => {
+                      if (index < 6) {
+                        return (
+                          <TableRow key={ index } className="bg-blue-100 shadow-lg">
+                            <Col1 data-label="Hash">{ data?.id?.slice(0, 2) + "..." + data?.id?.slice(-20, -1) }</Col1>
+                            <Col2 data-label="Address">{ txout?.address?.slice(0, 2) + "..." + txout?.address?.slice(-20, -1) }</Col2>
+                            <Col3 data-label="TimeStamp">{ txout?.amount }</Col3>
+                            <Col4 data-label="TimeStamp">{ data?.timestamp }</Col4>
+                          </TableRow>
+                        )
+                      }
+                      return null
+                    }
+                    ) }
+                  </Slider>
+                </div>
+              </div>
 
-          </Info>
-          }
-        </Main>
+            </Info>
+            }
+          </Main>
+        </div>
       </Layout>
     </>
   )

@@ -11,7 +11,7 @@ import { GetWindowDimensions } from "../utils"
 import ReactNotification, { store } from 'react-notifications-component'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Notification from "../components/Notif"
-
+import MiningIcon from '../hoe.svg';
 
 const Main = styled.div`
   top: 0;
@@ -35,9 +35,16 @@ const Decoration = styled.div`
   height: 20%;
 `
 
+const LS_ADDRESS = "Address"
+
 const Wallet = () => {
   const [flipped, setFlipped] = useState(false)
   const [pressed, setPressed] = useState(false);
+
+  const [address, setAddress] = useState(localStorage.getItem(LS_ADDRESS))
+  const [addressEdit, setAddressEdit] = useState(false)
+
+
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
     transform: `perspective(1200px) rotateX(${flipped ? 180 : 0}deg)`,
@@ -46,6 +53,8 @@ const Wallet = () => {
   const [cardWidth, setCardWidth] = useState()
 
   useEffect(() => {
+    setAddress("f849a3071c9abfc4705728e44de9cd0f515f212u3o4124")
+
     setCardWidth(GetWindowDimensions().width > 780 ? GetWindowDimensions().width * 0.5 / 2.58 : GetWindowDimensions().width * 0.8 / 2.58)
 
     function handleResize() {
@@ -100,6 +109,17 @@ const Wallet = () => {
        style={ { opacity: opacity.to(o => 1 - o), transform } }
        className={ `${styles.c} ` } 
        > */}
+          <div className="fixed bottom-5 right-5">
+            <button
+              className="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+              onClick={ () => alert("MINING") }
+              style={ { boxShadow: "2px 2px 3px #999" } }
+            >
+              <div className="w-6 h-6 md:w-8 md:h-8 text-blue-900">
+                <ImageLoad image={ MiningIcon } />
+              </div>
+            </button>
+          </div>
 
           <Card
             style={ { opacity: opacity.to(o => 1 - o), transform, display: flipped ? "none" : "flex", } }
@@ -124,12 +144,12 @@ const Wallet = () => {
               </CardHeader>
               <CardBody className="relative p-6 flex flex-col items-start justify-end  z-0" height={ cardWidth }>
 
-                { false ? (
+                { !addressEdit ? (
                   <>
                     <div className="text-lg ">
                       <span className="m-1">Address</span>
                       <span className="m-1">
-                        <FontAwesomeIcon icon={ faPen } size="sm" onClick={ () => { console.log("erun") } } />
+                        <FontAwesomeIcon icon={ faPen } size="sm" onClick={ () => setAddressEdit(true) } />
                       </span>
                     </div>
                     <div className="text-sm break-all w-10/12 cursor-pointer">
@@ -142,7 +162,11 @@ const Wallet = () => {
 
                           })
                         } } >
-                        <span>f849a3071c9abfc4705728e44de9cd0f515f23...</span>
+                        <span>
+                          {
+                            address !== undefined && address !== null ? address.slice(0, 30) + "..." : null
+                          }
+                        </span>
                       </CopyToClipboard>
 
 
@@ -150,7 +174,12 @@ const Wallet = () => {
                   </>
                 ) : <div>
                   <input type="text" class="rounded-lg text-gray-800" placeholder="Address" />
-                  <button>OK</button>
+                  <button
+                    className="m-2 w-10 h-10 text-center bg-green-400 rounded-full"
+                    onClick={ () => setAddressEdit(false) }
+                  >
+                    <span>OK</span>
+                  </button>
                 </div> }
 
 
@@ -180,17 +209,22 @@ const Wallet = () => {
 
                 </div>
               </CardHeader>
-              <CardBody className="relative p-6 flex flex-col items-start justify-end " >
+              <CardBody className="relative p-6 flex flex-col items-start justify-end" >
+
                 <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                   <span className="m-1">From</span>
-                  <input type="text" class="rounded text-gray-800" placeholder="Your Private Key" />
+                  <input type="text" className="rounded text-gray-800 shadow-md" placeholder="Your Private Key" />
+                </div>
+                <div className="w-full flex flex-col justify-center items-center text-lg p-2">
+                  <FontAwesomeIcon icon={ faExchangeAlt } size="lg" />
+                  <input type="text" className="m-2 rounded text-gray-800 w-20 shadow-md" placeholder="Amount" />
                 </div>
                 <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                   <span className="m-1">To</span>
-                  <input type="text" class="rounded text-gray-800" placeholder="Address" />
+                  <input type="text" className="rounded text-gray-800 shadow-md" placeholder="Address" />
                 </div>
                 <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                  <button>SEND</button>
+                  <button className="bg-blue-500 p-3 m-2 rounded-full shadow-lg">SEND</button>
                 </div>
 
 
