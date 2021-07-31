@@ -4,7 +4,7 @@ import Layout from "../components/Layout"
 import PageTitle from "../components/PageTitle"
 import { ImageLoad } from "../components/ImageLoad"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPen, faSyncAlt, faExchangeAlt } from "@fortawesome/free-solid-svg-icons"
+import { faPen, faSyncAlt, faArrowDown, faCheck } from "@fortawesome/free-solid-svg-icons"
 import { useSpring, a, Spring } from '@react-spring/web'
 import styles from '../components/styles.module.css'
 import { GetWindowDimensions } from "../utils"
@@ -12,6 +12,8 @@ import ReactNotification, { store } from 'react-notifications-component'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Notification from "../components/Notif"
 import MiningIcon from '../hoe.svg';
+import axios from "axios"
+import { useForm } from "react-hook-form";
 
 const Main = styled.div`
   top: 0;
@@ -38,12 +40,17 @@ const Decoration = styled.div`
 const LS_ADDRESS = "Address"
 
 const Wallet = () => {
+  const { register, handleSubmit, getValues, setValue } = useForm();
+
   const [flipped, setFlipped] = useState(false)
   const [pressed, setPressed] = useState(false);
 
   const [address, setAddress] = useState(localStorage.getItem(LS_ADDRESS))
   const [addressEdit, setAddressEdit] = useState(false)
 
+  const [balance, setBalance] = useState(0)
+
+  const [newCard, setNewCard] = useState()
 
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
@@ -53,22 +60,98 @@ const Wallet = () => {
   const [cardWidth, setCardWidth] = useState()
 
   useEffect(() => {
-    setAddress("f849a3071c9abfc4705728e44de9cd0f515f212u3o4124")
+    setAddress("f849a3071c9abfc4705728e44de9cd0f515f2316808e1ab5dad1eb2016a695e21d1334e45e2b09eccf3336e8df8549d8c03f0fc06915ff537468f747dcebe7ae")
 
     setCardWidth(GetWindowDimensions().width > 780 ? GetWindowDimensions().width * 0.5 / 2.58 : GetWindowDimensions().width * 0.8 / 2.58)
+
+
 
     function handleResize() {
       setCardWidth(GetWindowDimensions().width > 780 ? GetWindowDimensions().width * 0.5 / 2.58 : GetWindowDimensions().width * 0.8 / 2.58)
     }
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-
   }, [])
 
   const FlipCard = () => {
     setFlipped(state => !state)
     setPressed(true)
   }
+
+  useEffect(() => {
+    if (address !== undefined && address !== null) {
+      GetBalance()
+    }
+  }, [address])
+
+  const GetBalance = async () => {
+    try {
+      const response = await axios.get(
+        'http://localhost:4000/balance/' + address + '?total=true'
+      );
+      // let getBalanceResponse = [...response.data];
+
+      setBalance(response?.data?.balance)
+    } catch (e) {
+      console.log(e)
+    }
+
+  }
+
+  const GenerateNewKey = async () => {
+    try {
+      const response = await axios.get(
+        'http://localhost:4000/createkey'
+      )
+      setNewCard(response?.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const MakeTransaction = async (privkey, to, amount) => {
+    try {
+      let transaction_data = JSON.stringify({
+        privkey: privkey,
+        to: to,
+        amount: amount
+      })
+      axios.post(`http://127.0.0.1:4000/transactions`, transaction_data)
+        .then(res => {
+          console.log(res);
+          console.log(res.data)
+        })
+        .catch(error => console.log(error));
+
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const MiningBlock = async () => {
+    try {
+      let miningblock_data = JSON.stringify({
+        from: address
+      })
+      axios.post(`http://127.0.0.1:4000/blocks`, miningblock_data)
+        .then(res => {
+          console.log(res);
+          console.log(res.data)
+        })
+        .catch(error => console.log(error));
+
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onTransaction = async () => {
+    const { tx_from, tx_amount, tx_to } = getValues();
+    console.log(tx_from, tx_amount, tx_to);
+  }
+
+
 
   const SpringButton = () => {
     return (
@@ -87,6 +170,8 @@ const Wallet = () => {
       </Spring>
     );
   }
+
+
 
   // axios({
   //   method: 'post',
@@ -112,10 +197,10 @@ const Wallet = () => {
           <div className="fixed bottom-5 right-5">
             <button
               className="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-              onClick={ () => alert("MINING") }
+              onClick={ () => MiningBlock() }
               style={ { boxShadow: "2px 2px 3px #999" } }
             >
-              <div className="w-6 h-6 md:w-8 md:h-8 text-blue-900">
+              <div className="w-6 h-6 md:w-8 md:h-8 text-blue-900" >
                 <ImageLoad image={ MiningIcon } />
               </div>
             </button>
@@ -138,7 +223,7 @@ const Wallet = () => {
                 </div>
                 <div className="text-base">
                   <span className="font-semibold p-1">Balance</span>
-                  <span className="font-medium p-1">100 OPC</span>
+                  <span className="font-medium p-1">{ balance } OPC</span>
 
                 </div>
               </CardHeader>
@@ -173,12 +258,14 @@ const Wallet = () => {
                     </div>
                   </>
                 ) : <div>
-                  <input type="text" class="rounded-lg text-gray-800" placeholder="Address" />
+                  <input type="text" className="rounded-lg text-gray-800" placeholder="Address" />
                   <button
                     className="m-2 w-10 h-10 text-center bg-green-400 rounded-full"
                     onClick={ () => setAddressEdit(false) }
                   >
-                    <span>OK</span>
+                    <span>
+                      <FontAwesomeIcon icon={ faCheck } />
+                    </span>
                   </button>
                 </div> }
 
@@ -205,28 +292,56 @@ const Wallet = () => {
                 </div>
                 <div className="text-base">
                   <span className="font-semibold p-1">Balance</span>
-                  <span className="font-medium p-1">100 OPC</span>
+                  <span className="font-medium p-1">{ balance } OPC</span>
 
                 </div>
               </CardHeader>
               <CardBody className="relative p-6 flex flex-col items-start justify-end" >
+                <form onSubmit={ handleSubmit(onTransaction) }>
+                  <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                    <span className="m-1">From</span>
 
-                <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                  <span className="m-1">From</span>
-                  <input type="text" className="rounded text-gray-800 shadow-md" placeholder="Your Private Key" />
-                </div>
-                <div className="w-full flex flex-col justify-center items-center text-lg p-2">
-                  <FontAwesomeIcon icon={ faExchangeAlt } size="lg" />
-                  <input type="text" className="m-2 rounded text-gray-800 w-20 shadow-md" placeholder="Amount" />
-                </div>
-                <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                  <span className="m-1">To</span>
-                  <input type="text" className="rounded text-gray-800 shadow-md" placeholder="Address" />
-                </div>
-                <div className="w-full flex flex-row justify-around items-center text-lg p-2">
-                  <button className="bg-blue-500 p-3 m-2 rounded-full shadow-lg">SEND</button>
-                </div>
-
+                    <input
+                      type="text"
+                      className="rounded text-gray-800 shadow-md"
+                      placeholder="Your Private Key"
+                      name="tx_from"
+                      ref={ register({ required: true }) }
+                    />
+                  </div>
+                  <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                    <FontAwesomeIcon icon={ faArrowDown } />
+                    <form className="w-full max-w-sm">
+                      <div className="flex items-center border-b border-teal-500 py-2">
+                        <input
+                          className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                          type="text"
+                          placeholder="Jane Doe"
+                          aria-label="Full name"
+                          name="tx_amount"
+                          ref={ register({ required: true }) }
+                        />
+                      </div>
+                    </form>
+                  </div>
+                  <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                    <span className="m-1">To</span>
+                    <input
+                      type="text"
+                      className="rounded text-gray-800 shadow-md"
+                      placeholder="Address"
+                      name="tx_address"
+                      ref={ register({ required: true }) }
+                    />
+                  </div>
+                  <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                    <input
+                      className="bg-blue-500 p-3 m-2 rounded-full shadow-lg"
+                      type="submit"
+                      value="send"
+                    />
+                  </div>
+                </form>
 
               </CardBody>
 
