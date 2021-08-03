@@ -4,13 +4,13 @@ import Layout from "../components/Layout"
 import PageTitle from "../components/PageTitle"
 import { ImageLoad } from "../components/ImageLoad"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPen, faSyncAlt, faArrowDown, faCheck } from "@fortawesome/free-solid-svg-icons"
+import { faPen, faSyncAlt, faArrowDown, faCheck, faPlus, faMinus, faSave   } from "@fortawesome/free-solid-svg-icons"
 import { useSpring, a, Spring } from '@react-spring/web'
 import styles from '../components/styles.module.css'
 import { GetWindowDimensions } from "../utils"
 import ReactNotification, { store } from 'react-notifications-component'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Notification from "../components/Notif"
+import Notification, {FailNotification} from "../components/Notif"
 import MiningIcon from '../hoe.svg';
 import axios from "axios"
 import { useForm } from "react-hook-form";
@@ -54,6 +54,10 @@ const Wallet = () => {
 
   const [disabled, setDisabled] = useState(false)
 
+  // transaction constant 
+
+  const [amount, setAmount] = useState(0)
+
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
     transform: `perspective(1200px) rotateX(${flipped ? 180 : 0}deg)`,
@@ -79,6 +83,7 @@ const Wallet = () => {
     setPressed(true)
     setFlipped(state => !state)
     setPressed(false)
+
   }
 
   useEffect(() => {
@@ -87,6 +92,22 @@ const Wallet = () => {
       GetBalance()
     }
   }, [address])
+
+  // when amount constant change 
+  // if amount < 0 return 0
+  useEffect(() => {
+    if (amount < 0){
+      setAmount(0)
+    } else if (amount > balance){
+      setAmount(amount - 1)
+    }
+  },[amount])
+
+  // when flipped value change
+  // getbalance 
+  useEffect(()=>{
+    GetBalance()
+  },[flipped])
 
   const GetBalance = async () => {
     try {
@@ -100,6 +121,11 @@ const Wallet = () => {
       console.log(e)
     }
 
+  }
+
+  // after few moment run get balance 
+  const GetBalanceTimeOut = () => {
+    setTimeout(GetBalance(), 1000);
   }
 
   const GenerateNewKey = async () => {
@@ -120,13 +146,18 @@ const Wallet = () => {
         to: to,
         amount: amount
       })
-      axios.post(`http://127.0.0.1:4000/transactions`, transaction_data)
+      axios.post(`http://localhost:4000/transactions`, transaction_data)
         .then(res => {
-          console.log(res);
-          console.log(res.data)
+          store.addNotification({
+                            ...Notification("Your Transaction is on Memory Pool. Please Mine the block "),
+                            container: "bottom-left",
+                          })
         })
-        .catch(error => console.log(error));
-
+        .catch(error => store.addNotification({
+                            ...FailNotification("Please Check Your Transaction"),
+                            container: "bottom-left",
+                          }) );
+        GetBalanceTimeOut()
     } catch (e) {
       console.log(e)
     }
@@ -139,29 +170,48 @@ const Wallet = () => {
       })
       axios.post(`http://127.0.0.1:4000/blocks`, miningblock_data)
         .then(res => {
-          console.log(res);
-          console.log(res.data)
+          store.addNotification({
+                            ...Notification("Mining the block is successful!! "),
+                            container: "bottom-left",
+                          })
         })
-        .catch(error => console.log(error));
-
+        .catch(error =>store.addNotification({
+                            ...FailNotification("Mining the block is not successful"),
+                            container: "bottom-left",
+                          }) );
+        GetBalanceTimeOut()
     } catch (e) {
       console.log(e)
     }
   }
 
+  // onsubmit transaction event 
   const onTransaction = async () => {
     setDisabled(true)
-    const { tx_from, tx_amount, tx_to } = getValues();
-    console.log(tx_from, tx_amount, tx_to);
+
+    const { tx_from, tx_to } = getValues();
+    if (tx_from === undefined && tx_to === undefined) {
+      return 
+    }
+    await MakeTransaction(tx_from, tx_to, amount)
+
+    GetBalanceTimeOut()
+
     setDisabled(false)
   }
 
   const onChangeAddress = async () => {
-    console.log("noaoaosodofosaodfo ")
-    const { input_address } = getValues();
-    console.log(input_address)
-    setAddress(input_address)
+    const { changeaddress } = getValues();
+    if (changeaddress !== ""){
+      setAddress(changeaddress)
+    }
     setAddressEdit(false)
+  
+  }
+
+  const createNewCard = () => {
+    setAddress(newCard?.address)
+
   }
 
   const checkKeyDown = (e) => {
@@ -169,7 +219,7 @@ const Wallet = () => {
   };
 
 
-  const SpringButton = () => {
+  const FlipButton = () => {
     return (
       <Spring from={ { scale: 1 } } to={ { scale: pressed ? 0.8 : 1 } }>
         { ({ scale }) => (
@@ -187,12 +237,21 @@ const Wallet = () => {
     );
   }
 
+  const DownloadFile = () => {
+    const element = document.createElement("a");
+    const file = new Blob([JSON.stringify({"address": newCard?.address, "privkey": newCard?.key})], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = "ohpotatocoin_wallet.txt";
+    element.click();
+  }
+
   return (
     <>
       <ReactNotification />
       <Layout>
         <PageTitle title="Waleet" />
-        <Main
+        {address !== null && address !== undefined ? (
+          <Main
           className={ `relative flex flex-col w-full min-h-screen max-h-screen font-sans items-center justify-center text-white` }>
           {/* <a.div 
       onClick={ () => set(state => !state) }
@@ -237,10 +296,10 @@ const Wallet = () => {
 
                 { !addressEdit ? (
                   <>
-                    <div className="text-lg ">
+                    <div className="text-lg "  onClick={ () => setAddressEdit(true) }>
                       <span className="m-1">Address</span>
                       <span className="m-1">
-                        <FontAwesomeIcon icon={ faPen } size="sm" onClick={ () => setAddressEdit(true) } />
+                        <FontAwesomeIcon icon={ faPen } size="sm" />
                       </span>
                     </div>
                     <div className="text-sm break-all w-10/12 cursor-pointer">
@@ -266,15 +325,16 @@ const Wallet = () => {
                 ) : (
 
                   <div>
-                    <form onSubmit={ handleSubmit(onChangeAddress) }>
+                    <form className="m-0 " onSubmit={ handleSubmit(onChangeAddress) }  onKeyDown={ (e) => checkKeyDown(e) }>
                       <input
                         type="text"
-                        name="input_address"
-                        ref={ register({ required: true }) }
+                        name="changeaddress"
+                        ref={register()}
                         className="rounded-lg text-gray-800"
                         placeholder="Address"
                       />
                       <button
+
                         type="submit"
                         className="m-2 w-10 h-10 text-center bg-green-400 rounded-full"
                         disabled={ disabled }
@@ -287,7 +347,7 @@ const Wallet = () => {
 
               </CardBody>
               <div className=" absolute bottom-4 right-4 z-10">
-                <SpringButton />
+                <FlipButton />
               </div>
 
             </div>
@@ -312,40 +372,49 @@ const Wallet = () => {
                 </div>
               </CardHeader>
               <CardBody className="relative p-6 flex flex-col items-start justify-end" >
-                <form className="w-full relative " onSubmit={ handleSubmit(onTransaction) } onKeyDown={ (e) => checkKeyDown(e) } >
+                <form className="w-full relative flex flex-col justify-center items-center" onSubmit={ handleSubmit(onTransaction) } onKeyDown={ (e) => checkKeyDown(e) } >
                   <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                     <span className="m-1">From</span>
 
                     <input
                       type="text"
+                      ref={register()}
                       className="rounded text-gray-800 shadow-md"
                       placeholder="Your Private Key"
                       name="tx_from"
-                      ref={ register({ required: true }) }
                     />
                   </div>
-                  <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                  <div className="w-1/2 flex flex-row justify-between items-center text-lg p-2">
                     <FontAwesomeIcon icon={ faArrowDown } />
-                    <input
-                      type="text"
-                      className=""
-                      name="tx_amount"
-                      ref={ register({ required: true }) }
-                    />
+                    <div className="flex flex-row justify-center items-center">
+                      <span onClick={() => setAmount(amount + 1)}>
+                        <FontAwesomeIcon icon={faPlus} />
+                      </span>
+                    <div className="text-white p-4 ">
+                      <span>
+                        {amount}
+                      </span>
+                    </div>
+                      <span onClick={() => setAmount(amount - 1)}>
+                        <FontAwesomeIcon icon={faMinus} />
+                      </span>
+                    </div>
+                    
                   </div>
                   <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                     <span className="m-1">To</span>
                     <input
                       type="text"
+                      ref={register()}
                       className="rounded text-gray-800 shadow-md"
                       placeholder="Address"
                       name="tx_to"
-                      ref={ register({ required: true }) }
                     />
                   </div>
                   <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                     <input
-                      className="bg-blue-500 p-3 m-2 rounded-full shadow-lg"
+                      className={` p-3 m-2 rounded-full shadow-lg ${disabled ? "" :"bg-blue-500"}`}
+                      style={{ backgroundColor: disabled ? "#cccccc" : ""}}
                       type="submit"
                       value="send"
                     />
@@ -356,12 +425,77 @@ const Wallet = () => {
 
             </div>
             <div className=" absolute bottom-4 right-4 ">
-              <SpringButton />
+              <FlipButton />
             </div>
 
           </Card>
 
-        </Main>
+        </Main>) : (
+        <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+        <div className="text-center text-white text-2xl font-semibold">
+
+          <div className="text-3xl">
+            <span>Create Card</span>
+          </div>
+          {newCard === null || newCard === undefined ? (
+<div className="p-5">
+            <button
+            onClick={()=>{GenerateNewKey()}}
+             className="w-16 h-16 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </div>
+            ) : (   
+              <>
+              <div className="max-w-screen bg-white rounded-lg text-lg text-gray-800 m-2 mt-6 flex flex-col divide-y-2 divide-gray-400 divide-dashed p-6">
+            <div className="p-4 flex flex-col">
+              <div className="p-2">
+                <span>Public Address</span>
+              </div>
+
+              <div className="p-2 break-all text-sm">
+                <span>{newCard?.address}</span>
+              </div>
+            </div>
+            <div className="p-4 flex flex-col">
+              <div className="p-2">
+                <span>Private Key</span>
+              </div>
+
+              <div className="p-2 break-all text-sm">
+                <span>{newCard?.key}</span>
+              </div>
+            </div>
+
+            <div className="p-4 flex flex-row justify-center items-center">
+            <button 
+            onClick={()=>GenerateNewKey()}
+             className="m-2 text-white text-sm w-10 h-10 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+              <FontAwesomeIcon icon={faSyncAlt} />
+            </button>
+            <button 
+            onClick={()=>DownloadFile()}
+             className="m-2 text-white text-sm w-10 h-10 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+              <FontAwesomeIcon icon={faSave} />
+            </button>
+          </div>
+          </div>
+<div className="p-5">
+            <button
+            onClick={()=>createNewCard()}
+             className=" w-16 h-16 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
+          </div>
+           </>
+            )}
+          
+
+
+        </div>
+      </div>
+        )}
+        
       </Layout>
     </>
   )
