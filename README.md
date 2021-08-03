@@ -28,4 +28,8 @@ It consists of List of the blocks.
 
 It consists of Information of the transaction. See the specific inforamtion of that block.
 
+### Transaction "/wallet"
+
+This Page will create wallet and download it. Transaction with other people or Mine the Block. 
+
 ## The Other functions are coming soon
