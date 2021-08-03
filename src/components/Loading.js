@@ -12,6 +12,7 @@ export default function Loading() {
       scale: 1
     },
     to: {
+
       rotateZ: 45,
       scale: 1.3
     },

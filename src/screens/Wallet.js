@@ -52,6 +52,8 @@ const Wallet = () => {
 
   const [newCard, setNewCard] = useState()
 
+  const [disabled, setDisabled] = useState(false)
+
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
     transform: `perspective(1200px) rotateX(${flipped ? 180 : 0}deg)`,
@@ -59,12 +61,11 @@ const Wallet = () => {
   })
   const [cardWidth, setCardWidth] = useState()
 
+
+
   useEffect(() => {
-    setAddress("f849a3071c9abfc4705728e44de9cd0f515f2316808e1ab5dad1eb2016a695e21d1334e45e2b09eccf3336e8df8549d8c03f0fc06915ff537468f747dcebe7ae")
 
     setCardWidth(GetWindowDimensions().width > 780 ? GetWindowDimensions().width * 0.5 / 2.58 : GetWindowDimensions().width * 0.8 / 2.58)
-
-
 
     function handleResize() {
       setCardWidth(GetWindowDimensions().width > 780 ? GetWindowDimensions().width * 0.5 / 2.58 : GetWindowDimensions().width * 0.8 / 2.58)
@@ -75,12 +76,14 @@ const Wallet = () => {
   }, [])
 
   const FlipCard = () => {
-    setFlipped(state => !state)
     setPressed(true)
+    setFlipped(state => !state)
+    setPressed(false)
   }
 
   useEffect(() => {
     if (address !== undefined && address !== null) {
+      localStorage.setItem(LS_ADDRESS, address)
       GetBalance()
     }
   }, [address])
@@ -147,15 +150,28 @@ const Wallet = () => {
   }
 
   const onTransaction = async () => {
+    setDisabled(true)
     const { tx_from, tx_amount, tx_to } = getValues();
     console.log(tx_from, tx_amount, tx_to);
+    setDisabled(false)
   }
 
+  const onChangeAddress = async () => {
+    console.log("noaoaosodofosaodfo ")
+    const { input_address } = getValues();
+    console.log(input_address)
+    setAddress(input_address)
+    setAddressEdit(false)
+  }
+
+  const checkKeyDown = (e) => {
+    if (e.code === 'Enter') e.preventDefault();
+  };
 
 
   const SpringButton = () => {
     return (
-      <Spring native from={ { scale: 1 } } to={ { scale: pressed ? 0.8 : 1 } }>
+      <Spring from={ { scale: 1 } } to={ { scale: pressed ? 0.8 : 1 } }>
         { ({ scale }) => (
           <a.button
             style={ {
@@ -171,16 +187,6 @@ const Wallet = () => {
     );
   }
 
-
-
-  // axios({
-  //   method: 'post',
-  //   url: '/user/12345',
-  //   data: {
-  //     firstName: 'Fred',
-  //     lastName: 'Flintstone'
-  //   }
-  // });
   return (
     <>
       <ReactNotification />
@@ -239,16 +245,16 @@ const Wallet = () => {
                     </div>
                     <div className="text-sm break-all w-10/12 cursor-pointer">
                       <CopyToClipboard
-                        text={ "f849a3071c9abfc4705728e44de9cd0f515f212u3o4124" }
+                        text={ address }
                         onCopy={ () => {
                           store.addNotification({
                             ...Notification("Now Your Address is copied to your clipboard"),
                             container: "bottom-left",
-
                           })
                         } } >
                         <span>
                           {
+                            
                             address !== undefined && address !== null ? address.slice(0, 30) + "..." : null
                           }
                         </span>
@@ -257,17 +263,26 @@ const Wallet = () => {
 
                     </div>
                   </>
-                ) : <div>
-                  <input type="text" className="rounded-lg text-gray-800" placeholder="Address" />
-                  <button
-                    className="m-2 w-10 h-10 text-center bg-green-400 rounded-full"
-                    onClick={ () => setAddressEdit(false) }
-                  >
-                    <span>
-                      <FontAwesomeIcon icon={ faCheck } />
-                    </span>
-                  </button>
-                </div> }
+                ) : (
+
+                  <div>
+                    <form onSubmit={ handleSubmit(onChangeAddress) }>
+                      <input
+                        type="text"
+                        name="input_address"
+                        ref={ register({ required: true }) }
+                        className="rounded-lg text-gray-800"
+                        placeholder="Address"
+                      />
+                      <button
+                        type="submit"
+                        className="m-2 w-10 h-10 text-center bg-green-400 rounded-full"
+                        disabled={ disabled }
+                      >
+                        <FontAwesomeIcon icon={ faCheck } />
+                      </button>
+                    </form>
+                  </div>) }
 
 
               </CardBody>
@@ -297,7 +312,7 @@ const Wallet = () => {
                 </div>
               </CardHeader>
               <CardBody className="relative p-6 flex flex-col items-start justify-end" >
-                <form onSubmit={ handleSubmit(onTransaction) }>
+                <form className="w-full relative " onSubmit={ handleSubmit(onTransaction) } onKeyDown={ (e) => checkKeyDown(e) } >
                   <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                     <span className="m-1">From</span>
 
@@ -311,18 +326,12 @@ const Wallet = () => {
                   </div>
                   <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                     <FontAwesomeIcon icon={ faArrowDown } />
-                    <form className="w-full max-w-sm">
-                      <div className="flex items-center border-b border-teal-500 py-2">
-                        <input
-                          className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                          type="text"
-                          placeholder="Jane Doe"
-                          aria-label="Full name"
-                          name="tx_amount"
-                          ref={ register({ required: true }) }
-                        />
-                      </div>
-                    </form>
+                    <input
+                      type="text"
+                      className=""
+                      name="tx_amount"
+                      ref={ register({ required: true }) }
+                    />
                   </div>
                   <div className="w-full flex flex-row justify-around items-center text-lg p-2">
                     <span className="m-1">To</span>
@@ -330,7 +339,7 @@ const Wallet = () => {
                       type="text"
                       className="rounded text-gray-800 shadow-md"
                       placeholder="Address"
-                      name="tx_address"
+                      name="tx_to"
                       ref={ register({ required: true }) }
                     />
                   </div>
