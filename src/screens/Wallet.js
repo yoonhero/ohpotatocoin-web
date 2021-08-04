@@ -227,7 +227,7 @@ const Wallet = () => {
             style={ {
               transform: scale.interpolate(scale => `scale(${scale})`)
             } }
-            className=" p-3 bg-yellow-300 text-blue-800 rounded-full shadow-md"
+            className="w-10 h-10 text-center bg-yellow-300 text-blue-800 rounded-full shadow-md"
             onClick={ () => FlipCard() }
           >
             <FontAwesomeIcon icon={ faSyncAlt } />
@@ -249,7 +249,7 @@ const Wallet = () => {
     <>
       <ReactNotification />
       <Layout>
-        <PageTitle title="Waleet" />
+        <PageTitle title="Wallet" />
         {address !== null && address !== undefined ? (
           <Main
           className={ `relative flex flex-col w-full min-h-screen max-h-screen font-sans items-center justify-center text-white` }>
