@@ -5,9 +5,8 @@ import axios from "axios"
 import { Link } from "react-router-dom"
 import ReactPaginate from 'react-paginate';
 import Loading from "../components/Loading"
-import { GetWindowDimensions } from "../utils"
+import { GetWindowDimensions,DB_Address } from "../utils"
 import { Col1, Col2, Col3, Col4, TableHeader, TableRow, HoverCol1, HoverCol2 } from "../components/Table"
-
 
 
 function Blocks() {
@@ -23,7 +22,7 @@ function Blocks() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:4000/blocks'
+        DB_Address+"/blocks"
       );
       let newArr = [...response?.data];
       setData(newArr)
@@ -84,10 +83,12 @@ function Blocks() {
   return (
     <Layout>
       <PageTitle title={ "All Blocks" } />
-      <div className="flex items-center flex-col w-screen" >
+      <div className="flex flex-col items-center justify-center w-screen" >
         { loading || data === undefined ? (
           <Loading />
         ) : <>
+        <div className="w-full h-20"></div>
+
           <div className="font-sans text-2xl md:text-3xl text-gray-600 font-bold p-2 md:p-4">
             <span>All Blocks</span>
           </div>

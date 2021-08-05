@@ -9,11 +9,13 @@ import { useSpring, a, Spring } from '@react-spring/web'
 import styles from '../components/styles.module.css'
 import { GetWindowDimensions } from "../utils"
 import ReactNotification, { store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Notification, {FailNotification} from "../components/Notif"
 import MiningIcon from '../hoe.svg';
 import axios from "axios"
 import { useForm } from "react-hook-form";
+import { DB_Address } from "../utils"
 
 const Main = styled.div`
   top: 0;
@@ -112,7 +114,7 @@ const Wallet = () => {
   const GetBalance = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:4000/balance/' + address + '?total=true'
+        DB_Address+'/balance/' + address + '?total=true'
       );
       // let getBalanceResponse = [...response.data];
 
@@ -131,7 +133,7 @@ const Wallet = () => {
   const GenerateNewKey = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:4000/createkey'
+        DB_Address+'/createkey'
       )
       setNewCard(response?.data)
     } catch (e) {
@@ -146,7 +148,7 @@ const Wallet = () => {
         to: to,
         amount: amount
       })
-      axios.post(`http://localhost:4000/transactions`, transaction_data)
+      axios.post(DB_Address+'/transactions', transaction_data)
         .then(res => {
           store.addNotification({
                             ...Notification("Your Transaction is on Memory Pool. Please Mine the block "),
@@ -168,7 +170,7 @@ const Wallet = () => {
       let miningblock_data = JSON.stringify({
         from: address
       })
-      axios.post(`http://127.0.0.1:4000/blocks`, miningblock_data)
+      axios.post(DB_Address+'/blocks', miningblock_data)
         .then(res => {
           store.addNotification({
                             ...Notification("Mining the block is successful!! "),
@@ -238,7 +240,7 @@ const Wallet = () => {
   }
 
   const DownloadFile = () => {
-    const element = document.createElement("a");
+  const element = document.createElement("a");
     const file = new Blob([JSON.stringify({"address": newCard?.address, "privkey": newCard?.key})], {type: 'text/plain'});
     element.href = URL.createObjectURL(file);
     element.download = "ohpotatocoin_wallet.txt";
@@ -261,7 +263,7 @@ const Wallet = () => {
        > */}
           <div className="fixed bottom-5 right-5">
             <button
-              className="bg-gradient-to-r from-green-500 to-green-600 p-4 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110"
+              className="bg-gradient-to-r from-green-400 to-green-500 00 p-4 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105"
               onClick={ () => MiningBlock() }
               style={ { boxShadow: "2px 2px 3px #999" } }
             >
@@ -452,19 +454,36 @@ const Wallet = () => {
               <div className="p-2">
                 <span>Public Address</span>
               </div>
+               <CopyToClipboard text={newCard?.address} onCopy={ () => {
+                      store.addNotification({
+                        ...Notification("Your Address is copied to your clipboard"),
+                        container: "bottom-left",
 
-              <div className="p-2 break-all text-sm">
+                      })
+                    } } >
+                      <div className="p-2 break-all text-sm cursor-pointer">
                 <span>{newCard?.address}</span>
               </div>
+                    </CopyToClipboard>
+              
             </div>
             <div className="p-4 flex flex-col">
               <div className="p-2">
                 <span>Private Key</span>
               </div>
 
-              <div className="p-2 break-all text-sm">
+              <CopyToClipboard text={newCard?.key} onCopy={ () => {
+                      store.addNotification({
+                        ...Notification("Your Private Key is copied to your clipboard"),
+                        container: "bottom-left",
+
+                      })
+                    } } >
+                      <div className="p-2 break-all text-sm cursor-pointer">
                 <span>{newCard?.key}</span>
               </div>
+                    </CopyToClipboard>
+
             </div>
 
             <div className="p-4 flex flex-row justify-center items-center">

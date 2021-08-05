@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import Loading from "../components/Loading"
 import { GetWindowDimensions } from "../utils"
 import { Col1, Col2, Col3, Col4, TableHeader, TableRow, HoverCol1, HoverCol2 } from "../components/Table"
+import { DB_Address } from "../utils"
 
 const Transactions = () => {
   const [data, setData] = useState()
@@ -21,7 +22,7 @@ const Transactions = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:4000/transactions'
+        DB_Address+'/transactions'
       );
       let newArr = [...response?.data];
       setData(newArr)

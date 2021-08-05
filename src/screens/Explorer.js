@@ -9,6 +9,7 @@ import { CarouselSettingsExplorer } from "../components/Carousel"
 import Loading from "../components/Loading"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
+import { DB_Address } from "../utils"
 
 const Li = styled.li`
  border-radius: 3px;
@@ -77,21 +78,22 @@ function Explorer() {
   const [status, setStatus] = useState()
 
   const fetchData = async () => {
+    console.log(DB_Address)
     try {
       const response = await axios.get(
-        'http://localhost:4000/latestblocks'
+        DB_Address + '/latestblocks'
       );
       let newArr = [...response.data];
       setData(newArr)
 
       const status_response = await axios.get(
-        "http://localhost:4000/status"
+        DB_Address+"/status"
       );
       console.log(status_response)
       setStatus(status_response.data)
 
       const tx_respone = await axios.get(
-        'http://localhost:4000/latesttransactions'
+        DB_Address+'/latesttransactions'
       );
       let txArr = []
       for (const [_, value] of Object.entries(tx_respone.data)) {

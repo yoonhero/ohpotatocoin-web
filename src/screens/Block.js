@@ -7,6 +7,7 @@ import PageTitle from "../components/PageTitle"
 import { Link } from "react-router-dom"
 import ReactNotification, { store } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
+import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
 import 'animate.css/animate.compat.css'
 import Loading from "../components/Loading"
@@ -14,7 +15,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Slider from "react-slick";
 import Notification from "../components/Notif"
 import { CarouselSettings } from "../components/Carousel"
-
+import { DB_Address } from "../utils"
 
 const Li = styled.li`
  border-radius: 3px;
@@ -104,7 +105,8 @@ const Block = () => {
   const [date, setDate] = useState()
   const [reward, setReward] = useState()
   const getBlockData = async () => {
-    const block = await axios.get("http://localhost:4000/blocks/" + hash)
+
+    const block = await axios.get(DB_Address +"/blocks/" + hash)
     setData(block.data)
   }
 
@@ -148,7 +150,7 @@ const Block = () => {
               <h1 className="font-sans text-2xl md:text-4xl antialiased font-bold  ...">Block { data?.height }</h1>
               <div style={ { padding: 20 } } className="flex flex-col ...">
                 <p className="font-mono font-medium leading-normal ...">This block was mined on { date } </p>
-                <p className="font-mono font-medium leading-normal ...">The Block rewards, also known as the Coinbase reward, were sent to this <Link to={ "/address/" + miner }>address</Link> </p>
+                <p className="font-mono font-medium leading-normal break-all ...">The Block rewards, also known as the Coinbase reward, were sent to this {miner} address</p>
               </div>
               <div className="flex flex-col p-3 select-none">
                 <div className="divide-y-2 divide-solid  divide-black divide-opacity-10 ">

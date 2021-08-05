@@ -7,6 +7,7 @@ import PageTitle from "../components/PageTitle"
 import { Link } from "react-router-dom"
 import ReactNotification, { store } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
+import 'react-notifications-component/dist/theme.css'
 import 'animate.css/animate.min.css';
 import 'animate.css/animate.compat.css'
 import Loading from "../components/Loading"
@@ -14,7 +15,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Slider from "react-slick";
 import Notification from "../components/Notif"
 import { CarouselSettings } from "../components/Carousel"
-
+import { DB_Address } from "../utils"
 
 const Li = styled.li`
  border-radius: 3px;
@@ -102,7 +103,7 @@ const Transaction = () => {
   const [date, setDate] = useState()
   const [reward, setReward] = useState()
   const getBlockData = async () => {
-    const block = await axios.get("http://localhost:4000/transaction/" + hash)
+    const block = await axios.get(DB_Address+"/transaction/" + hash)
     setData(block.data)
   }
 

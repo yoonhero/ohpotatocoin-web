@@ -7,3 +7,4 @@ export function GetWindowDimensions() {
   };
 }
 
+export const DB_Address = "http://3.35.139.61"
