@@ -7,4 +7,4 @@ export function GetWindowDimensions() {
   };
 }
 
-export const DB_Address = "http://3.35.139.61"
+export const DB_Address = "http://ec2-3-35-101-66.ap-northeast-2.compute.amazonaws.com:4000"

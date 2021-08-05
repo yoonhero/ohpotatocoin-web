@@ -78,7 +78,6 @@ function Explorer() {
   const [status, setStatus] = useState()
 
   const fetchData = async () => {
-    console.log(DB_Address)
     try {
       const response = await axios.get(
         DB_Address + '/latestblocks'
@@ -89,7 +88,6 @@ function Explorer() {
       const status_response = await axios.get(
         DB_Address+"/status"
       );
-      console.log(status_response)
       setStatus(status_response.data)
 
       const tx_respone = await axios.get(
@@ -106,9 +104,6 @@ function Explorer() {
     }
   };
 
-  useEffect(() => {
-    console.log(status)
-  }, [status])
 
   useEffect(() => {
     setLoading(true);
