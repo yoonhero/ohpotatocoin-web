@@ -376,7 +376,7 @@ const Wallet = () => {
               display: !flipped ? "none" : "flex",
             } }
             className={ `${styles.c} ` } >
-            <div className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl select-none" >
+            <div className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl" >
               <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
                 <div data-tip="click to refresh"  className="w-10 m-2" onClick={()=>GetBalance()}>
                   <ImageLoad image={ "/ohpotato.png" } /> 
@@ -400,7 +400,7 @@ const Wallet = () => {
                       name="tx_from"
                     />
                   </div>
-                  <div className="w-1/2 flex flex-row justify-between items-center text-lg p-2">
+                  <div className="w-1/2 flex flex-row justify-between items-center text-lg p-2 select-none">
                     <FontAwesomeIcon icon={ faArrowDown } />
                     <div className="flex flex-row justify-center items-center">
                       <span onClick={() => setAmount(amount + 1)}>
