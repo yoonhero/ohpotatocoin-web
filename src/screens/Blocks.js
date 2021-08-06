@@ -100,9 +100,7 @@ function Blocks() {
               <Col4>Time</Col4>
             </TableHeader>
             { data.map((block, index) => {
-              console.log(index)
               if (index >= offset && index < offset + pages) {
-                console.log(index)
                 return (
                   <TableRow className="p-15 m-10" key={ block?.height }>
                     <Link to={ "/block/" + block?.hash }>

@@ -16,6 +16,7 @@ import MiningIcon from '../hoe.svg';
 import axios from "axios"
 import { useForm } from "react-hook-form";
 import { DB_Address } from "../utils"
+import ReactTooltip from 'react-tooltip';
 
 const Main = styled.div`
   top: 0;
@@ -59,6 +60,18 @@ const Wallet = () => {
   // transaction constant 
 
   const [amount, setAmount] = useState(0)
+
+  // refresh icon shown 
+
+  const [isShown, setIsShown] = useState(false)
+
+  const handleMouseOver = () => {
+    setIsShown(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsShown(false);
+  };
 
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
@@ -252,6 +265,7 @@ const Wallet = () => {
       <ReactNotification />
       <Layout>
         <PageTitle title="Wallet" />
+        <ReactTooltip place="top" type="dark" effect="solid"/>
         {address !== null && address !== undefined ? (
           <Main
           className={ `relative flex flex-col w-full min-h-screen max-h-screen font-sans items-center justify-center text-white` }>
@@ -263,12 +277,12 @@ const Wallet = () => {
        > */}
           <div className="fixed bottom-5 right-5">
             <button
-              className="bg-gradient-to-r from-green-400 to-green-500 00 p-4 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+              className="bg-gradient-to-r from-green-400 to-green-500 00 p-3 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105"
               onClick={ () => MiningBlock() }
               style={ { boxShadow: "2px 2px 3px #999" } }
             >
-              <div className="w-6 h-6 md:w-8 md:h-8 text-blue-900" >
-                <ImageLoad image={ MiningIcon } />
+              <div className="w-10 h-10 md:w-8 md:h-8 text-blue-900" data-tip="Mine the block" >
+                <ImageLoad image={ "./pickwhite.png" } />
               </div>
             </button>
           </div>
@@ -285,7 +299,7 @@ const Wallet = () => {
             >
 
               <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
-                <div className="w-10 m-2">
+                <div data-tip="click to refresh" className="w-10 m-2" onClick={()=>GetBalance()}>
                   <ImageLoad image={ "/ohpotato.png" } />
                 </div>
                 <div className="text-base">
@@ -298,9 +312,9 @@ const Wallet = () => {
 
                 { !addressEdit ? (
                   <>
-                    <div className="text-lg "  onClick={ () => setAddressEdit(true) }>
+                    <div className="text-lg flex flex-row"  onClick={ () => setAddressEdit(true) }>
                       <span className="m-1">Address</span>
-                      <span className="m-1">
+                      <span className="m-1" data-tip="edit your address">
                         <FontAwesomeIcon icon={ faPen } size="sm" />
                       </span>
                     </div>
@@ -362,10 +376,10 @@ const Wallet = () => {
               display: !flipped ? "none" : "flex",
             } }
             className={ `${styles.c} ` } >
-            <div className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl" >
+            <div className="w-full h-full bg-gradient-to-r from-blue-300 to-blue-500 rounded-xl shadow-2xl select-none" >
               <CardHeader className="flex flex-row w-full items-center justify-between p-2 " >
-                <div className="w-10 m-2">
-                  <ImageLoad image={ "/ohpotato.png" } />
+                <div data-tip="click to refresh"  className="w-10 m-2" onClick={()=>GetBalance()}>
+                  <ImageLoad image={ "/ohpotato.png" } /> 
                 </div>
                 <div className="text-base">
                   <span className="font-semibold p-1">Balance</span>
@@ -403,7 +417,7 @@ const Wallet = () => {
                     </div>
                     
                   </div>
-                  <div className="w-full flex flex-row justify-around items-center text-lg p-2">
+                  <div className="w-full flex flex-row justify-around items-center text-lg p-2" >
                     <span className="m-1">To</span>
                     <input
                       type="text"
