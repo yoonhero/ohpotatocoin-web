@@ -100,7 +100,7 @@ function Explorer() {
       setTxs(txArr)
 
     } catch (e) {
-      console.log(e)
+      (e)
     }
   };
 

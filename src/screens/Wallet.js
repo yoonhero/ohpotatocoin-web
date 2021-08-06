@@ -434,7 +434,7 @@ const Wallet = () => {
 
         </Main>) : (
         <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
-        <div className="text-center text-white text-2xl font-semibold">
+        <div className="text-center text-white text-2xl font-semibold flex flex-col items-center justify-center">
 
           <div className="text-3xl">
             <span>Create Card</span>
@@ -449,7 +449,7 @@ const Wallet = () => {
           </div>
             ) : (   
               <>
-              <div className="max-w-screen bg-white rounded-lg text-lg text-gray-800 m-2 mt-6 flex flex-col divide-y-2 divide-gray-400 divide-dashed p-6">
+              <div className="max-w-screen md:w-1/2 bg-white rounded-lg text-lg text-gray-800 m-2 mt-6 flex flex-col divide-y-2 divide-gray-400 divide-dashed p-6">
             <div className="p-4 flex flex-col">
               <div className="p-2">
                 <span>Public Address</span>

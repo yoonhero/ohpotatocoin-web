@@ -86,6 +86,7 @@ const Transactions = () => {
         { loading || data === undefined ? (
           <Loading />
         ) : <>
+                  <div className="w-full h-20"></div>
           <div className="font-sans text-2xl md:text-3xl text-gray-600 font-bold p-2 md:p-4">
             <span>All Transactions</span>
           </div>
@@ -125,7 +126,7 @@ const Transactions = () => {
                   </thead>
                   <tbody className="">
                     { data.map((tx, index) => {
-                      if (index > offset && index < offset + pages) {
+                      if (index >= offset && index < offset + pages) {
 
                         return (
                           <tr className="p-5 rounded-lg " key={ tx?.id }>
