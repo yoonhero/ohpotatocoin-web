@@ -491,7 +491,7 @@ const Wallet = () => {
                                         <div className="p-4 flex flex-row justify-center items-center">
                                             <button
                                                 onClick={ () => GenerateNewKey() }
-                                                className="m-2 text-white text-sm w-10 h-10 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+                                                className=" m-2 text-white text-sm w-10 h-10 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
                                                 <FontAwesomeIcon icon={ faSyncAlt } />
                                             </button>
                                             <button
@@ -504,7 +504,7 @@ const Wallet = () => {
                                     <div className="p-2 md:p-5">
                                         <button
                                             onClick={ () => createNewCard() }
-                                            className="w-16 h-16 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+                                            className=" w-16 h-16 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500 ">
                                             <FontAwesomeIcon icon={ faCheck } />
                                         </button>
                                     </div>

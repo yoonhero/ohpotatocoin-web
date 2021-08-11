@@ -1,0 +1,7 @@
+### 
+POST https://ohpotatocoin.herokuapp.com/blocks
+
+{
+    "address": "e685bb8bb14506447c1a2e717baaa824230038a20c4e5020e5d888e9734bef4cbc2dbb5ec0beaa1660bee5be6455bcd4d088ef980c66084556545cca552989b3",
+
+}

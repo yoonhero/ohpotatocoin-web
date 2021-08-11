@@ -35,7 +35,9 @@ const Titles = styled.div`
 
 const ImageCon = styled.div`
   max-width: 400px;
-  padding: 20px;
+  min-width: 200px;
+  min-height: 200px; 
+  margin: 20px;
   img {
     width: 100%;
   }
@@ -91,8 +93,9 @@ const Home = () => {
                         <Title>1 OhPotatoCoin = </Title>
                         <Title> 1 오감자</Title>
                     </Titles>
-                    <ImageCon>
-                        <ImageLoad image={ "/ohpotato-icon.png" } />
+                    <ImageCon className="rounded-full animate-pulse  p-0">
+
+                        <ImageLoad image={ "http://drive.google.com/uc?export=view&id=1BDK19ybygCB13Ep6eLE2WzU7Q8vuEdnk" } />
                     </ImageCon>
 
                     <Info>Ohpotato coin is open source p2p digital currency, made by Yoonhero06</Info>
