@@ -1,8 +1,10 @@
 # OhPotatoCoin 오감자코인
 
-## [Beta Result](https://ohpotatocoin.netlify.app)
+## [Result](https://ohpotatocoin.netlify.app)
 
 This project is based on the ohpotato series. This Coin is made of BlockChain System. [OhpotatCoin](https://github.com/yoonhero/ohpotatocoin) is the Backend of the BlockChain.
+
+![initial](https://user-images.githubusercontent.com/57530375/128958361-74c72726-014f-4185-92d5-d6749be33cd4.png)
 
 ## Functions
 
@@ -30,6 +32,6 @@ It consists of Information of the transaction. See the specific inforamtion of t
 
 ### Transaction "/wallet"
 
-This Page will create wallet and download it. Transaction with other people or Mine the Block. 
+This Page will create wallet and download it. Transaction with other people or Mine the Block.
 
 ## The Other functions are coming soon
