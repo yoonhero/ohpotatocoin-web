@@ -148,7 +148,7 @@ const Transaction = () => {
                                                     <TableRow key={ index } className="bg-blue-100 shadow-lg">
                                                         <Col1 data-label="Hash">{ data?.id?.slice(0, 2) + "..." + data?.id?.slice(-20, -1) }</Col1>
                                                         <Col2 data-label="Address">{ txout?.address?.slice(0, 2) + "..." + txout?.address?.slice(-20, -1) }</Col2>
-                                                        <Col3 data-label="TimeStamp">{ txout?.amount }</Col3>
+                                                        <Col3 data-label="Amount">{ txout?.amount } OPC</Col3>
                                                         <Col4 data-label="TimeStamp">{ data?.timestamp }</Col4>
                                                     </TableRow>
                                                 )

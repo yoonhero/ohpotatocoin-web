@@ -269,7 +269,7 @@ const Wallet = () => {
                                 onClick={ () => MiningBlock() }
                                 style={ { boxShadow: "2px 2px 3px #999" } }
                             >
-                                <div className="w-10 h-10 md:w-8 md:h-8 text-blue-900" data-tip="Mine the block" >
+                                <div className="w-10 h-10 md:w-8 md:h-8 text-blue-900" >
                                     <ImageLoad image={ "./pickwhite.png" } />
                                 </div>
                             </button>
