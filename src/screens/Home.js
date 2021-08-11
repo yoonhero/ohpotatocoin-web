@@ -93,7 +93,7 @@ const Home = () => {
                         <Title>1 OhPotatoCoin = </Title>
                         <Title> 1 오감자</Title>
                     </Titles>
-                    <ImageCon className="rounded-full animate-pulse  p-0">
+                    <ImageCon className="rounded-full  p-0">
 
                         <ImageLoad image={ "http://drive.google.com/uc?export=view&id=1BDK19ybygCB13Ep6eLE2WzU7Q8vuEdnk" } />
                     </ImageCon>
