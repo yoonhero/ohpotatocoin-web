@@ -98,146 +98,146 @@ const Info = styled.div`
 `
 
 const Block = () => {
-  const { hash } = useParams()
-  const [data, setData] = useState([])
-  const [miner, setMiner] = useState("")
-  const [loading, setLoading] = useState(true)
-  const [date, setDate] = useState()
-  const [reward, setReward] = useState()
-  const getBlockData = async () => {
+    const { hash } = useParams()
+    const [data, setData] = useState([])
+    const [miner, setMiner] = useState("")
+    const [loading, setLoading] = useState(true)
+    const [date, setDate] = useState()
+    const [reward, setReward] = useState()
+    const getBlockData = async () => {
 
-    const block = await axios.get(DB_Address +"/blocks/" + hash)
-    setData(block.data)
-  }
-
-  useEffect(() => {
-    setLoading(true)
-    getBlockData()
-    setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    if (data !== []) {
-      let dt = new Date(data?.timestamp * 1000)
-      dt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes()
-      setDate(dt)
-      data?.transactions?.map(tx => {
-
-        tx?.txIns?.map(txin => {
-          if (txin?.signature === "COINBASE") {
-            setMiner(tx?.txOuts[0]?.address)
-            setReward(tx?.txOuts[0]?.amount + " ohpotato")
-            return 0
-          }
-        })
-      })
+        const block = await axios.get(DB_Address + "/blocks/" + hash)
+        setData(block.data)
     }
-  }, [data])
 
-  ///shadow-xl 
-  return (
-    <>
-      <ReactNotification />
-      <Layout>
+    useEffect(() => {
+        setLoading(true)
+        getBlockData()
+        setLoading(false)
+    }, [])
+
+    useEffect(() => {
+        if (data !== []) {
+            let dt = new Date(data?.timestamp * 1000)
+            dt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes()
+            setDate(dt)
+            data?.transactions?.map(tx => {
+
+                tx?.txIns?.map(txin => {
+                    if (txin?.signature === "COINBASE") {
+                        setMiner(tx?.txOuts[0]?.address)
+                        setReward(tx?.txOuts[0]?.amount + " ohpotato")
+                        return 0
+                    }
+                })
+            })
+        }
+    }, [data])
+
+    ///shadow-xl 
+    return (
+        <>
+            <ReactNotification />
+            <Layout>
 
 
-        <PageTitle title={ "Block" } />
-        <div className="w-full min-h-screen flex flex-col items-center justify-center">
-          <div className="w-full h-20"></div>
-          <Main>
+                <PageTitle title={ "Block" } />
+                <div className="w-full min-h-screen flex flex-col items-center justify-center">
+                    <div className="w-full h-20"></div>
+                    <Main>
 
-            { loading ? <Loading /> : <Info>
-              <h1 className="font-sans text-2xl md:text-4xl antialiased font-bold  ...">Block { data?.height }</h1>
-              <div style={ { padding: 20 } } className="flex flex-col ...">
-                <p className="font-mono font-medium leading-normal ...">This block was mined on { date } </p>
-                <p className="font-mono font-medium leading-normal break-all ...">The Block rewards, also known as the Coinbase reward, were sent to this {miner} address</p>
-              </div>
-              <div className="flex flex-col p-3 select-none">
-                <div className="divide-y-2 divide-solid  divide-black divide-opacity-10 ">
-                  {/* <div className="flex flex-row  flex-wrap items-center ...">
+                        { loading ? <Loading /> : <Info>
+                            <h1 className="font-sans text-2xl md:text-4xl antialiased font-bold  ...">Block { data?.height }</h1>
+                            <div style={ { padding: 20 } } className="flex flex-col ...">
+                                <p className="font-mono font-medium leading-normal ...">This block was mined on { date } </p>
+                                <p className="font-mono font-medium leading-normal break-all ...">The Block rewards, also known as the Coinbase reward, were sent to this { miner } address</p>
+                            </div>
+                            <div className="flex flex-col p-3 select-none">
+                                <div className="divide-y-2 divide-solid  divide-black divide-opacity-10 ">
+                                    {/* <div className="flex flex-row  flex-wrap items-center ...">
                 <div className="font-sans text-lg p-3 w-40 ... ">Id</div>
                 <div className="font-sans text-normal p-3 ...">{ data.height }</div>
               </div> */}
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... " >Hash</div>
-                    <CopyToClipboard text={ data?.hash } onCopy={ () => {
-                      store.addNotification({
-                        ...Notification("Now Block's Hash is copied to your clipboard"),
-                        container: "bottom-left",
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... " >Hash</div>
+                                        <CopyToClipboard text={ data?.hash } onCopy={ () => {
+                                            store.addNotification({
+                                                ...Notification("Now Block's Hash is copied to your clipboard"),
+                                                container: "bottom-left",
 
-                      })
-                    } } >
-                      <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.hash }</div>
-                    </CopyToClipboard>
+                                            })
+                                        } } >
+                                            <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.hash }</div>
+                                        </CopyToClipboard>
 
-                  </div>
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... ">PrevHash</div>
-                    <CopyToClipboard text={ data?.prevHash } onCopy={ () => {
-                      store.addNotification({
-                        ...Notification("Now Block's Previous Hash is copied to your clipboard"),
-                        container: "bottom-left",
+                                    </div>
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... ">PrevHash</div>
+                                        <CopyToClipboard text={ data?.prevHash } onCopy={ () => {
+                                            store.addNotification({
+                                                ...Notification("Now Block's Previous Hash is copied to your clipboard"),
+                                                container: "bottom-left",
 
-                      })
-                    } } >
-                      <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.prevHash }</div>
-                    </CopyToClipboard>
+                                            })
+                                        } } >
+                                            <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.prevHash }</div>
+                                        </CopyToClipboard>
 
-                  </div>
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... ">TimeStamp</div>
-                    <div className="font-sans text-normal p-3 ...">{ date }</div>
-                  </div>
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... ">Miner</div>
-                    <div className="font-sans text-normal p-3 ...">{ miner.slice(0, 40) + "..." }</div>
-                  </div>
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... ">Difficulty</div>
-                    <div className="font-sans text-normal p-3 ...">{ data?.difficulty }</div>
-                  </div>
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... ">Nonce</div>
-                    <div className="font-sans text-normal p-3 ...">{ data?.nonce }</div>
-                  </div>
-                  <div className="flex flex-row  flex-wrap items-center ...">
-                    <div className="font-sans text-lg p-3 w-40 ... ">BlockReward</div>
-                    <div className="font-sans text-normal p-3 ...">{ reward }</div>
-                  </div>
+                                    </div>
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... ">TimeStamp</div>
+                                        <div className="font-sans text-normal p-3 ...">{ date }</div>
+                                    </div>
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... ">Miner</div>
+                                        <div className="font-sans text-normal p-3 ...">{ miner.slice(0, 40) + "..." }</div>
+                                    </div>
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... ">Difficulty</div>
+                                        <div className="font-sans text-normal p-3 ...">{ data?.difficulty }</div>
+                                    </div>
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... ">Nonce</div>
+                                        <div className="font-sans text-normal p-3 ...">{ data?.nonce }</div>
+                                    </div>
+                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                        <div className="font-sans text-lg p-3 w-40 ... ">BlockReward</div>
+                                        <div className="font-sans text-normal p-3 ...">{ reward }</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            { data.transactions !== undefined && data.transactions !== null ? <div className=" p-10 w-2/3 font-sans subpixel-antialiased ">
+                                <Slider { ...CarouselSettings }>
+                                    { data?.transactions?.map((tx, index) => {
+                                        return tx?.txOuts?.map(txout => {
+                                            return (
+                                                <>
+                                                    <TableRow key={ txout?.address }>
+                                                        <Link to={ "/transaction/" + tx?.id }>
+                                                            <HoverCol1 data-label="Hash">{ tx?.id?.slice(0, 2) + "..." + tx?.id?.slice(-20, -1) }</HoverCol1>
+                                                        </Link>
+                                                        <Link to={ "/transaction/" + tx?.id }>
+                                                            <HoverCol2 data-label="Address">{ txout?.address?.slice(0, 2) + "..." + txout?.address?.slice(-20, -1) }</HoverCol2>
+                                                        </Link>
+                                                        <Col3 data-label="Amount">{ txout?.amount } </Col3>
+                                                        <Col4 data-label="TimeStamp">{ tx?.timestamp }</Col4>
+                                                    </TableRow>
+                                                </>
+                                            )
+                                        })
+                                    }) }
+                                </Slider>
+                            </div> : null }
+
+                        </Info>
+                        }
+                    </Main>
                 </div>
-
-              </div>
-
-              { data.transactions !== undefined && data.transactions !== null ? <div className=" p-10 w-2/3 font-sans subpixel-antialiased ">
-                <Slider { ...CarouselSettings }>
-                  { data?.transactions?.map((tx, index) => {
-                    return tx?.txOuts?.map(txout => {
-                      return (
-                        <>
-                          <TableRow key={ txout?.address }>
-                            <Link to={ "/transaction/" + tx?.id }>
-                              <HoverCol1 data-label="Hash">{ tx?.id?.slice(0, 2) + "..." + tx?.id?.slice(-20, -1) }</HoverCol1>
-                            </Link>
-                            <Link to={ "/transaction/" + tx?.id }>
-                              <HoverCol2 data-label="Address">{ txout?.address?.slice(0, 2) + "..." + txout?.address?.slice(-20, -1) }</HoverCol2>
-                            </Link>
-                            <Col3 data-label="Amount">{ txout?.amount } </Col3>
-                            <Col4 data-label="TimeStamp">{ tx?.timestamp }</Col4>
-                          </TableRow>
-                        </>
-                      )
-                    })
-                  }) }
-                </Slider>
-              </div> : null }
-
-            </Info>
-            }
-          </Main>
-        </div>
-      </Layout>
-    </>
-  )
+            </Layout>
+        </>
+    )
 }
 
 export default Block
