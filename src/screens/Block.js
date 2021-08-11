@@ -158,7 +158,7 @@ const Block = () => {
                 <div className="font-sans text-lg p-3 w-40 ... ">Id</div>
                 <div className="font-sans text-normal p-3 ...">{ data.height }</div>
               </div> */}
-                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                    <div className="flex flex-row  flex-wrap items-center   ...">
                                         <div className="font-sans text-lg p-3 w-40 ... " >Hash</div>
                                         <CopyToClipboard text={ data?.hash } onCopy={ () => {
                                             store.addNotification({
@@ -167,11 +167,11 @@ const Block = () => {
 
                                             })
                                         } } >
-                                            <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.hash }</div>
+                                            <div className="w-full  md:w-auto font-sans text-normal p-3 cursor-pointer break-all ...">{ data?.hash?.slice(0, 80) + "..." }</div>
                                         </CopyToClipboard>
 
                                     </div>
-                                    <div className="flex flex-row  flex-wrap items-center ...">
+                                    <div className="flex flex-row  flex-wrap items-center  ...">
                                         <div className="font-sans text-lg p-3 w-40 ... ">PrevHash</div>
                                         <CopyToClipboard text={ data?.prevHash } onCopy={ () => {
                                             store.addNotification({
@@ -180,7 +180,7 @@ const Block = () => {
 
                                             })
                                         } } >
-                                            <div className="font-sans text-normal p-3 cursor-pointer ...">{ data?.prevHash }</div>
+                                            <div className="w-full  md:w-auto font-sans text-normal p-3 cursor-pointer break-all ...">{ data?.prevHash?.slice(0, 80) + "..." }</div>
                                         </CopyToClipboard>
 
                                     </div>
@@ -190,7 +190,7 @@ const Block = () => {
                                     </div>
                                     <div className="flex flex-row  flex-wrap items-center ...">
                                         <div className="font-sans text-lg p-3 w-40 ... ">Miner</div>
-                                        <div className="font-sans text-normal p-3 ...">{ miner.slice(0, 40) + "..." }</div>
+                                        <div className="w-full md:w-auto font-sans text-normal p-3 ...">{ miner.slice(0, 40) + "..." }</div>
                                     </div>
                                     <div className="flex flex-row  flex-wrap items-center ...">
                                         <div className="font-sans text-lg p-3 w-40 ... ">Difficulty</div>
@@ -208,7 +208,7 @@ const Block = () => {
 
                             </div>
 
-                            { data.transactions !== undefined && data.transactions !== null ? <div className=" p-10 w-2/3 font-sans subpixel-antialiased ">
+                            { data.transactions !== undefined && data.transactions !== null ? <div className="mt-10 md:p-10 w-10/12 md:w-2/3 font-sans subpixel-antialiased ">
                                 <Slider { ...CarouselSettings }>
                                     { data?.transactions?.map((tx, index) => {
                                         return tx?.txOuts?.map(txout => {

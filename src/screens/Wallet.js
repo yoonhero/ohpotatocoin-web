@@ -61,18 +61,6 @@ const Wallet = () => {
 
     const [amount, setAmount] = useState(0)
 
-    // refresh icon shown 
-
-    const [isShown, setIsShown] = useState(false)
-
-    const handleMouseOver = () => {
-        setIsShown(true);
-    };
-
-    const handleMouseOut = () => {
-        setIsShown(false);
-    };
-
     const { transform, opacity } = useSpring({
         opacity: flipped ? 1 : 0,
         transform: `perspective(1200px) rotateX(${flipped ? 180 : 0}deg)`,
@@ -450,7 +438,7 @@ const Wallet = () => {
                     <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
                         <div className="text-center text-white text-2xl font-semibold flex flex-col items-center justify-center">
 
-                            <div className="text-3xl">
+                            <div className="text-white text-2xl md:text-3xl">
                                 <span>Create Card</span>
                             </div>
                             { newCard === null || newCard === undefined ? (
@@ -463,7 +451,7 @@ const Wallet = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <div className="max-w-screen md:w-1/2 bg-white rounded-lg text-lg text-gray-800 m-2 mt-6 flex flex-col divide-y-2 divide-gray-400 divide-dashed p-6">
+                                    <div className="max-w-screen md:w-1/2 bg-white rounded-lg text-lg text-gray-800 m-2 mt-6 flex flex-col divide-y-2 divide-gray-400 divide-dashed p-2 md:p-6">
                                         <div className="p-4 flex flex-col">
                                             <div className="p-2">
                                                 <span>Public Address</span>
@@ -476,7 +464,7 @@ const Wallet = () => {
                                                 })
                                             } } >
                                                 <div className="p-2 break-all text-sm cursor-pointer">
-                                                    <span>{ newCard?.address }</span>
+                                                    <span>{ newCard?.address !== undefined && newCard?.address !== null ? GetWindowDimensions().width < 500 ? newCard?.address.slice(0, 60) + "..." : newCard?.address : null }</span>
                                                 </div>
                                             </CopyToClipboard>
 
@@ -494,7 +482,7 @@ const Wallet = () => {
                                                 })
                                             } } >
                                                 <div className="p-2 break-all text-sm cursor-pointer">
-                                                    <span>{ newCard?.key }</span>
+                                                    <span>{ newCard?.key !== undefined && newCard?.key !== null ? GetWindowDimensions().width < 500 ? newCard?.key.slice(0, 60) + "..." : newCard?.key : null }</span>
                                                 </div>
                                             </CopyToClipboard>
 
@@ -513,10 +501,10 @@ const Wallet = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="p-5">
+                                    <div className="p-2 md:p-5">
                                         <button
                                             onClick={ () => createNewCard() }
-                                            className=" w-16 h-16 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
+                                            className="w-16 h-16 rounded-full bg-yellow-400 text-center shadow-lg hover:bg-yellow-500">
                                             <FontAwesomeIcon icon={ faCheck } />
                                         </button>
                                     </div>
