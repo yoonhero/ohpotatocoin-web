@@ -7,4 +7,4 @@ export function GetWindowDimensions() {
     };
 }
 
-export const DB_Address = "https://ohpotatocoin.herokuapp.com"
+export const DB_Address = process.env.NODE_ENV === "production" ? "https://ohpotatocoin.herokuapp.com" : "http://localhost:4000"

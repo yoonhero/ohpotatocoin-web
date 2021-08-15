@@ -68,7 +68,7 @@ const Wallet = () => {
     })
     const [cardWidth, setCardWidth] = useState()
 
-
+    const [mine, setMine] = useState(false)
 
     useEffect(() => {
 
@@ -168,6 +168,7 @@ const Wallet = () => {
 
     const MiningBlock = async () => {
         try {
+            setMine(true)
             let miningblock_data = JSON.stringify({
                 from: address
             })
@@ -183,6 +184,7 @@ const Wallet = () => {
                     container: "bottom-left",
                 }));
             GetBalanceTimeOut()
+            setMine(false)
         } catch (e) {
             console.log(e)
         }
@@ -265,9 +267,10 @@ const Wallet = () => {
        > */}
                         <div className="fixed bottom-5 right-5">
                             <button
-                                className="bg-gradient-to-r from-green-400 to-green-500 00 p-3 rounded-full transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+                                className={ `bg-gradient-to-r ${!mine ? "disabled" : "from-green-400 to-green-500 hover:-translate-y-1 hover:scale-105"}  p-3 rounded-full transition duration-500 ease-in-out transform ` }
                                 onClick={ () => MiningBlock() }
                                 style={ { boxShadow: "2px 2px 3px #999" } }
+                                disabled={ !mine }
                             >
                                 <div className="w-10 h-10 md:w-8 md:h-8 text-blue-900" >
                                     <ImageLoad image={ "./pickwhite.png" } />
