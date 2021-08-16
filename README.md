@@ -1,5 +1,7 @@
 # OhPotatoCoin 오감자코인
 
+[![wakatime](https://wakatime.com/badge/github/yoonhero/ohpotatocoin-web.svg)](https://wakatime.com/badge/github/yoonhero/ohpotatocoin-web)
+
 ## [Result](https://ohpotatocoin.netlify.app)
 
 This project is based on the ohpotato series. This Coin is made of BlockChain System. [OhpotatCoin](https://github.com/yoonhero/ohpotatocoin) is the Backend of the BlockChain.
