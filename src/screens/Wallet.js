@@ -111,6 +111,7 @@ const Wallet = () => {
   useEffect(() => {
     GetBalance()
   }, [flipped])
+
   // Convert a hex string to a byte array
   function hexToBytes(hex) {
     for (var bytes = [], c = 0; c < hex.length; c += 2)
@@ -201,21 +202,19 @@ const Wallet = () => {
     }
   }
 
-  // "66595613d0f285a23e99782b22c7c86a36f87f97983dd9cc3c6126ed633432ce"
-  // "JnsgMDAwMDAwZGQwZTNkOGYxNDM1N2QyZTIyMTQ4ZGJlM2U3ZjAxMDhkMDFkYmVlNTM0ZTgyOGMxNTU2Njg4OTM4ZiAzMiA2IDAgMCBbMHhjMDAwMjhjYTAwXX0="
   const MiningBlock = async () => {
     try {
       setMine(true)
       let miningblock_data = JSON.stringify({
         from: address
       })
-      axios.post(DB_Address + '/mining', miningblock_data)
+      axios.post(DB_Address + '/blocks', miningblock_data)
         .then(res => {
-          setToMineData(res.data)
-          // store.addNotification({
-          //     ...Notification("Mining the block is successful!! "),
-          //     container: "bottom-left",
-          // })
+          // setToMineData(res.data)
+          store.addNotification({
+            ...Notification("Mining the block is successful!! "),
+            container: "bottom-left",
+          })
         })
         .catch(error => store.addNotification({
           ...FailNotification("Mining the block is not successful"),
