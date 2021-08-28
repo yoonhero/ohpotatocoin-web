@@ -12,28 +12,28 @@ This project is based on the ohpotato series. This Coin is made of BlockChain Sy
 
 This project performs a various visualization of the blockchain:
 
-### Explore "/explorer"
+- Explore "/explorer"
 
 It consists of Information of the ohpotatocoin. And See latest block and transaction.
 
-### All Blocks "/blocks"
+- All Blocks "/blocks"
 
 It consists of List of the blocks.
 
-### Block "/block/{hash}"
+- Block "/block/{hash}"
 
 It consists of Information of the block. See the specific inforamtion of that block.
 
-### All Transactions "/transactions/"
+- All Transactions "/transactions/"
 
 It consists of List of the blocks.
 
-### Transaction "/transaction/{hash}"
+- Transaction "/transaction/{hash}"
 
 It consists of Information of the transaction. See the specific inforamtion of that block.
 
-### Transaction "/wallet"
+-Transaction "/wallet"
 
 This Page will create wallet and download it. Transaction with other people or Mine the Block.
 
-## The Other functions are coming soon
+- The Other functions are coming soon
